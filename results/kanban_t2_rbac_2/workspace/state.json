@@ -1,0 +1,108 @@
+{
+  "taskId": "kanban_t2_rbac_2",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现登录接口 routes_auth.py",
+      "description": "实现 POST /login 登录接口：验证用户名密码，返回含 user_id + tenant_id + exp 的 JWT token。错误处理：400（缺少字段）、401（凭据无效）。使用 middleware.hash_password() 验证密码。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/routes_auth.py"],
+      "history": [
+        {"action": "pulled_to_in_progress", "note": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "developer_complete", "note": "Developer 完成：实现 POST /login，含字段校验、密码验证、JWT 生成"},
+        {"action": "tester_report", "note": "有条件通过：核心功能正常，_login helper 在所有 fixture 中工作"},
+        {"action": "review_passed", "note": "审查通过：JWT payload、密码验证、错误码、返回格式全部正确"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现角色管理接口 routes_role.py",
+      "description": "实现 5 个角色管理端点：POST /roles（创建角色，需 role.manage）、GET /roles（列出本租户角色，需 role.manage）、PUT /roles/<id>/permissions（替换权限集+更新 parent，需检测继承链循环）、POST /users/<id>/roles（分配角色）、DELETE /users/<id>/roles/<role_id>（移除角色，幂等）。创建时检测重名和跨租户 parent。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "L",
+      "priority": 2,
+      "files": ["starter/routes_role.py"],
+      "history": [
+        {"action": "pulled_to_in_progress", "note": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "developer_complete", "note": "Developer 完成：实现 5 个角色管理端点，含循环检测、跨租户校验、幂等删除"},
+        {"action": "tester_report", "note": "有条件通过：4/4 直接测试通过。4 个间接测试失败因依赖 ATU-003 文档端点"},
+        {"action": "review_passed", "note": "审查通过：循环检测、跨租户校验、部分更新、幂等删除全部正确。记录非阻塞安全加固建议"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现文档 CRUD + RBAC routes_document.py",
+      "description": "实现 5 个文档端点：GET /documents（需 doc.read，只返回本租户）、GET /documents/<id>（需 doc.read + 同租户，否则 404）、POST /documents（需 doc.write）、PUT /documents/<id>（需 doc.write + owner 或 doc.write.any）、DELETE /documents/<id>（需 doc.delete）。所有操作需租户隔离。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 3,
+      "files": ["starter/routes_document.py"],
+      "history": [
+        {"action": "pulled_to_in_progress", "note": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "developer_complete", "note": "Developer 完成：实现 5 个文档端点，含租户隔离、owner/write.any 逻辑"},
+        {"action": "tester_report", "note": "全部 19/19 测试通过"},
+        {"action": "review_passed", "note": "审查通过：租户隔离、owner/write.any 逻辑、错误码、返回格式全部正确"}
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：ATU-001+ATU-002 核心功能 4/4 通过，7 个失败均为 ATU-003 文档端点未实现所致，有条件通过"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：全部 19/19 通过，ATU-003 文档端点功能完整"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试（19/19）和审查，移至 Done。全部 ATU 完成！"
+    }
+  ],
+  "tokenLog": []
+}

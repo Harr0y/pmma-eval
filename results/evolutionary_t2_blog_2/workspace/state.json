@@ -1,0 +1,409 @@
+{
+  "taskId": "T2-blog-tag-management",
+  "method": "evolutionary",
+  "startTime": "2026-04-26T00:00:00Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "延迟导入模式（_models() 函数避免循环导入）",
+      "纯函数验证器（_validate_name() 返回元组，不直接构建响应）",
+      "响应构建器封装（_ok() / _error() 统一格式）",
+      "显式级联删除（tag.articles = [] 在删除标签前清除关联）",
+      "排除式唯一性检查（_is_name_available(name, exclude_id) 处理同名称无操作）",
+      "使用 Tag.query.order_by(Tag.id).all() 确保列表返回稳定排序",
+      "db.get_or_404() + NotFound 捕获（自动 404 处理单资源查找）",
+      "SQLAlchemy 2.0 select() 模式（db.select() + db.session.execute()）",
+      "_serialize_article() 序列化函数（单一序列化函数确保一致性）",
+      "Flask <int:> URL 转换器（利用 URL 参数类型约束）",
+      "body 字段不做 strip（保留原始内容，仅 title 做 strip）",
+      "ORM relationship 操作（article.tags.append/remove）",
+      "全量验证后变异（先验证所有关联 ID 存在，再统一修改）",
+      "幂等绑定（if tag not in article.tags 检查）",
+      "自定义查询参数解析器（保留 + 字符如 C++）",
+      "查询构建器辅助函数（封装筛选逻辑）",
+      "SQLAlchemy 2.0 join-based 筛选"
+    ],
+    "architecturalNotes": []
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Tag CRUD Routes",
+      "description": "实现 routes_tag.py 的完整标签 CRUD：POST/GET/PUT/DELETE /tags",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": [
+        "starter/routes_tag.py"
+      ],
+      "testFile": "tests/test_atu001_tag_crud.py",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {
+              "name": "sample1",
+              "score": "36/38",
+              "passed": 36,
+              "total": 38,
+              "strategy": "try/except + db.session.execute(select())"
+            },
+            {
+              "name": "sample2",
+              "score": "36/38",
+              "passed": 36,
+              "total": 38,
+              "strategy": "helper-function + Tag.query ORM style"
+            }
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "延迟导入模式（_models() 函数避免循环导入）",
+            "纯函数验证器（返回 (bool, result) 元组）",
+            "响应构建器封装（_ok() / _error()）",
+            "显式级联删除（tag.articles = []）",
+            "排除式唯一性检查（exclude_id 参数）",
+            "列表查询使用 order_by 确保稳定排序"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Article Basic CRUD",
+      "description": "实现 routes_article.py 的文章基础 CRUD：POST/GET /articles, GET /articles/<id>",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "testFile": "tests/test_atu002_article_crud.py",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {
+              "name": "sample1",
+              "score": "44/45",
+              "passed": 44,
+              "total": 45,
+              "strategy": "直接导入 + 纯函数验证器 + 响应构建器"
+            },
+            {
+              "name": "sample2",
+              "score": "45/45",
+              "passed": 45,
+              "total": 45,
+              "strategy": "延迟导入 + 内联验证 + db.get_or_404() + select() 查询"
+            }
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "db.get_or_404() + NotFound 捕获（自动 404）",
+            "内联验证（验证逻辑直接在路由中）",
+            "SQLAlchemy 2.0 select() 模式",
+            "_serialize_article() 序列化函数",
+            "Flask <int:> URL 转换器",
+            "body 不做 strip（保留原始内容）"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "Article-Tag Binding",
+      "description": "实现 routes_article.py 的文章标签绑定功能：POST/GET/DELETE /articles/<id>/tags, DELETE /articles/<id>/tags/<tag_id>",
+      "status": "done",
+      "dependencies": [
+        "ATU-001",
+        "ATU-002"
+      ],
+      "complexity": "M",
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "testFile": "tests/test_atu003_article_tag_binding.py",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {
+              "name": "sample1",
+              "score": "27/28",
+              "passed": 27,
+              "total": 28,
+              "strategy": "ORM relationship append/remove + inline validation"
+            },
+            {
+              "name": "sample2",
+              "score": "27/28",
+              "passed": 27,
+              "total": 28,
+              "strategy": "association table direct insert/delete + helper validators"
+            }
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "ORM relationship 操作（article.tags.append/remove 自动处理关联表）",
+            "全量验证后变异（先验证所有 tag_ids，再统一绑定）",
+            "幂等绑定（if tag not in article.tags 检查）",
+            "严格解绑检测（tag not in article.tags 返回 404）"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "Article Filtering by Tag",
+      "description": "实现 routes_article.py 的按标签筛选文章功能：GET /articles?tag=<name>, GET /articles?tag_id=<id>",
+      "status": "done",
+      "dependencies": [
+        "ATU-001",
+        "ATU-002",
+        "ATU-003"
+      ],
+      "complexity": "M",
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "testFile": "tests/test_atu004_filter.py",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "38/38", "passed": 38, "total": 38, "strategy": "join-based 筛选 + 自定义查询参数解析"},
+            {"name": "sample2", "score": "38/38", "passed": 38, "total": 38, "strategy": "两步反向引用查询法 + 原始查询字符串解析"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "自定义查询参数解析器（保留 + 字符如 C++）",
+            "查询构建器辅助函数（_build_filtered_article_query）",
+            "SQLAlchemy 2.0 join-based 筛选",
+            "优雅降级（非数字 tag_id 不报错）"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "TDD 测试先行",
+      "timestamp": "2026-04-26T09:44:37.482Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始",
+      "timestamp": "2026-04-26T09:44:37.489Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 Developer 生成 sample1 和 sample2",
+      "timestamp": "2026-04-26T09:44:37.491Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 36/38, sample2: 36/38。最优: sample2",
+      "timestamp": "2026-04-26T09:44:37.492Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：延迟导入、纯函数验证、响应构建器、显式级联、排除式唯一性检查、列表排序",
+      "timestamp": "2026-04-26T09:44:37.493Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功",
+      "timestamp": "2026-04-26T09:44:37.494Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成",
+      "timestamp": "2026-04-26T09:44:37.494Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始（含交叉遗传）"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 sample1 和 sample2（注入 ATU-001 遗传材料）"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 44/45, sample2: 45/45。最优: sample2"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：db.get_or_404()、内联验证、select() 模式、序列化函数、URL 转换器、body 不 strip"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行",
+      "timestamp": "2026-04-26T09:48:04.127Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始（含交叉遗传）",
+      "timestamp": "2026-04-26T09:48:04.130Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 sample1 和 sample2",
+      "timestamp": "2026-04-26T09:48:04.133Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 44/45, sample2: 45/45。最优: sample2",
+      "timestamp": "2026-04-26T09:48:04.135Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：db.get_or_404、内联验证、select()、序列化函数、URL 转换器、body 不 strip",
+      "timestamp": "2026-04-26T09:48:04.137Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功",
+      "timestamp": "2026-04-26T09:48:04.139Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成",
+      "timestamp": "2026-04-26T09:48:04.141Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "TDD 测试先行",
+      "timestamp": "2026-04-26T09:51:18.070Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-003",
+      "description": "第 1 代进化开始（含交叉遗传）",
+      "timestamp": "2026-04-26T09:51:18.072Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-003",
+      "description": "委派 Developer 生成 sample1 和 sample2",
+      "timestamp": "2026-04-26T09:51:18.074Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-003",
+      "description": "sample1: 27/28, sample2: 27/28。最优: sample1（ORM relationship 风格）",
+      "timestamp": "2026-04-26T09:51:18.076Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-003",
+      "description": "提取性状：ORM relationship 操作、全量验证后变异、幂等绑定、严格解绑检测",
+      "timestamp": "2026-04-26T09:51:18.077Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-003",
+      "description": "第 1 代进化成功",
+      "timestamp": "2026-04-26T09:51:18.079Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成",
+      "timestamp": "2026-04-26T09:51:18.081Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "TDD 测试先行",
+      "timestamp": "2026-04-26T09:56:24.113Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-004",
+      "description": "第 1 代进化开始（含交叉遗传）",
+      "timestamp": "2026-04-26T09:56:24.114Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-004",
+      "description": "委派 Developer 生成 sample1 和 sample2",
+      "timestamp": "2026-04-26T09:56:24.114Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-004",
+      "description": "sample1: 38/38, sample2: 38/38。最优: sample1（join-based 筛选）",
+      "timestamp": "2026-04-26T09:56:24.115Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-004",
+      "description": "提取性状：自定义查询参数解析、查询构建器函数、join-based 筛选、优雅降级",
+      "timestamp": "2026-04-26T09:56:24.115Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-004",
+      "description": "第 1 代进化成功",
+      "timestamp": "2026-04-26T09:56:24.116Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 完成",
+      "timestamp": "2026-04-26T09:56:24.116Z"
+    }
+  ],
+  "tokenLog": []
+}

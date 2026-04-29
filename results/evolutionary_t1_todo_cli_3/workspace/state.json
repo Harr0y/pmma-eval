@@ -1,0 +1,204 @@
+{
+  "taskId": "T1-1-todo-cli",
+  "method": "evolutionary",
+  "startTime": "2026-04-26T00:00:00.000Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "load-append-save 三步模式：add 命令使用 load_todos() → list.append() → save_todos() 确保文件格式一致",
+      "enumerate(start=1) 生成 1-based ID：list 命令使用 enumerate(todos, start=1)，空列表时循环不执行自然满足无输出要求",
+      "if/elif 命令分支：简单直接的过程式命令分发，适合小型 CLI 工具",
+      "三层防御性参数校验：remove 命令采用缺参检查 → 类型转换 → 边界检查，每层静默返回",
+      "del 原地删除：使用 del todos[index] 而非 list comprehension，语义更明确",
+      "条件性 save：只在 ID 有效时才执行 save_todos()，避免无效文件写入",
+      "try/except ValueError 隔离类型转换：仅对 int() 转换使用异常处理，逻辑错误用 if 守卫"
+    ],
+    "architecturalNotes": []
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Implement add and list commands",
+      "description": "实现 todo.py 的 add 和 list 命令：add 将任务追加到 todos.txt，list 按 1-based 行号显示任务，空列表无输出",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": [
+        "starter/todo.py"
+      ],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {
+              "name": "sample1",
+              "score": "15/15",
+              "strategy": "过程式 if/elif + load/save 模式"
+            },
+            {
+              "name": "sample2",
+              "score": "5/15",
+              "strategy": "函数式 + dict dispatch + 追加模式写入"
+            }
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "load-append-save 三步模式确保文件格式一致性",
+            "enumerate(start=1) 生成 1-based ID，空列表自然无输出",
+            "if/elif 命令分支简单直接",
+            "remove 占位 pass 为后续 ATU 预留扩展点"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Implement remove command and edge cases",
+      "description": "实现 todo.py 的 remove 命令：按 ID 删除任务，不存在的 ID 静默忽略不崩溃",
+      "status": "done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "S",
+      "files": [
+        "starter/todo.py"
+      ],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {
+              "name": "sample3",
+              "score": "29/29",
+              "strategy": "if 边界检查 + del 原地删除"
+            },
+            {
+              "name": "sample4",
+              "score": "29/29",
+              "strategy": "list comprehension 过滤 + 独立函数"
+            }
+          ],
+          "winner": "sample3",
+          "retainedTraits": [
+            "三层防御性参数校验（缺参→类型→边界）",
+            "del 原地删除语义明确",
+            "条件性 save 避免无效文件写入",
+            "try/except ValueError 仅用于类型转换"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "项目初始化完成：2 个 ATU（add+list / remove），maxGenerations=5, populationSize=2",
+      "timestamp": "2026-04-26T09:37:56.276Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "TDD 测试先行，委派 Tester 编写 ATU-001（add+list）测试",
+      "timestamp": "2026-04-26T09:38:00.987Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始",
+      "timestamp": "2026-04-26T09:38:21.558Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 Developer 生成 sample1（过程式 if/elif + load/save 模式）和 sample2（函数式 + dict dispatch + 追加模式写入）变体",
+      "timestamp": "2026-04-26T09:38:53.005Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 15/15 通过, sample2: 5/15 通过（list_todos 签名 Bug）。最优样本: sample1",
+      "timestamp": "2026-04-26T09:38:58.408Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：1) load-append-save 三步模式 2) enumerate(start=1) 1-based ID 3) if/elif 命令分支 4) remove 占位 pass",
+      "timestamp": "2026-04-26T09:39:04.544Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功，ATU-001 完成",
+      "timestamp": "2026-04-26T09:39:10.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:39:10.000Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行，委派 Tester 编写 ATU-002（remove）测试",
+      "timestamp": "2026-04-26T09:39:17.531Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始，注入 ATU-001 遗传材料",
+      "timestamp": "2026-04-26T09:39:51.903Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 sample3（if 边界检查 + del 删除）和 sample4（list comprehension 过滤 + 独立函数）变体",
+      "timestamp": "2026-04-26T09:40:08.406Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample3: 29/29 通过, sample4: 29/29 通过。两个样本均完全通过，选择 sample3",
+      "timestamp": "2026-04-26T09:40:17.279Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：1) 三层防御性参数校验 2) del 原地删除 3) 条件性 save 4) try/except ValueError 仅用于类型转换",
+      "timestamp": "2026-04-26T09:40:40.461Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成",
+      "timestamp": "2026-04-26T09:40:45.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:40:45.000Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成",
+      "timestamp": "2026-04-26T09:40:53.641Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:40:53.643Z"
+    }
+  ],
+  "tokenLog": []
+}

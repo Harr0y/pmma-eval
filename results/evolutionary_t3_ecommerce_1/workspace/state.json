@@ -1,0 +1,112 @@
+{
+  "taskId": "T3-ecommerce",
+  "method": "evolutionary",
+  "startTime": "2026-04-26T18:40:00Z",
+  "endTime": "2026-04-26T10:51:05Z",
+  "changeInjected": true,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "finalTestResult": "19/19 PASSED",
+  "geneticMaterial": {
+    "patterns": [
+      "单一装饰器同时处理认证(401)和授权(403)，减少路由函数样板代码",
+      "验证函数返回 (fields, error) 元组模式，让路由函数保持简洁",
+      "序列化函数集中处理 ORM-to-dict 转换，确保响应格式一致",
+      "使用 201 Created 状态码表示资源创建成功",
+      "Guard clause + early return 线性控制流，零嵌套",
+      "统一 _fail() 辅助函数标准化错误响应",
+      "原子库存扣减使用 raw SQL UPDATE...WHERE stock >= qty 防止竞态超卖",
+      "命名序列化函数 _serialize_order() 确保 POST 和 GET 响应格式一致",
+      "辅助函数验证输入值类型（如 _coerce_origin），非合法类型回退默认值",
+      "模块级常量集中管理默认值（如 _ORIGIN_DEFAULT）",
+      "模型字段 nullable=False + default='xxx' 数据库级约束",
+      "SlidingWindowRateLimiter 使用 OrderedDict 实现滑动窗口，O(1) 驱逐最旧条目",
+      "通过 current_app.extensions 存储限流器实例，确保每个 Flask app 独立状态（防止测试间状态泄漏）",
+      "check_rate_limit() 便捷包装函数供路由直接调用",
+      "模块级常量 _WINDOW_SECONDS/_MAX_REQUESTS 集中配置限流参数"
+    ],
+    "architecturalNotes": [
+      "ATU-002 的原子库存扣减（raw SQL）在 ATU-005 中直接通过，证明了遗传保留的价值",
+      "ATU-004 Sample2 的失败教训：模块级单例在测试环境中会泄漏状态，应使用 app.extensions 模式"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001", "title": "Product Management Routes", "status": "Done",
+      "dependencies": [], "complexity": "S", "files": ["routes_product.py"],
+      "testFilter": "test_basic.py::TestProductManagement test_basic.py::TestRBAC",
+      "currentGeneration": 1,
+      "generations": [{"gen": 1, "samples": [{"name": "sample1", "score": "6/6"}, {"name": "sample2", "score": "6/6"}], "winner": "sample1", "retainedTraits": ["装饰器+元组验证+序列化+201"]}],
+      "history": ["Gen 1: 6/6 vs 6/6 → sample1"], "retryCount": 0
+    },
+    {
+      "id": "ATU-002", "title": "Core Order Routes", "status": "Done",
+      "dependencies": ["ATU-001"], "complexity": "M", "files": ["routes_order.py"],
+      "testFilter": "test_basic.py::TestOrderSystem",
+      "currentGeneration": 1,
+      "generations": [{"gen": 1, "samples": [{"name": "sample1", "score": "7/7"}, {"name": "sample2", "score": "3/7"}], "winner": "sample1", "retainedTraits": ["guard clause+_fail()+atomic SQL+_serialize_order"]}],
+      "history": ["Gen 1: 7/7 vs 3/7 → sample1"], "retryCount": 0
+    },
+    {
+      "id": "ATU-003", "title": "Order Origin Field", "status": "Done",
+      "description": "Add origin field to Order model + routes support",
+      "dependencies": ["ATU-002"], "complexity": "S", "files": ["models.py", "routes_order.py"],
+      "testFilter": "test_change.py::TestOrderOrigin",
+      "currentGeneration": 1,
+      "generations": [{"gen": 1, "samples": [{"name": "sample1", "score": "15/15"}, {"name": "sample2", "score": "15/15"}], "winner": "sample1", "retainedTraits": ["_coerce_origin+_serialize_order+_ORIGIN_DEFAULT+nullable=False"]}],
+      "history": ["Gen 1: 15/15 vs 15/15 → sample1"], "retryCount": 0
+    },
+    {
+      "id": "ATU-004", "title": "Rate Limiting", "status": "Done",
+      "description": "Add rate limiting in middleware.py",
+      "dependencies": ["ATU-002"], "complexity": "M", "files": ["middleware.py", "routes_order.py"],
+      "testFilter": "test_change.py::TestRateLimiting",
+      "currentGeneration": 1,
+      "generations": [{"gen": 1, "samples": [{"name": "sample1", "score": "19/19"}, {"name": "sample2", "score": "10/19"}], "winner": "sample1", "retainedTraits": ["SlidingWindowRateLimiter+current_app.extensions+check_rate_limit+_WINDOW_SECONDS常量"]}],
+      "history": ["Gen 1: 19/19 vs 10/19 → sample1（sample2 失败：模块级单例状态泄漏）"], "retryCount": 0
+    },
+    {
+      "id": "ATU-005", "title": "Atomic Stock Deduction", "status": "Done",
+      "description": "Already satisfied by ATU-002's atomic SQL pattern — no code changes needed",
+      "dependencies": ["ATU-002"], "complexity": "M", "files": ["routes_order.py"],
+      "testFilter": "test_change.py::TestAtomicStock",
+      "currentGeneration": 0,
+      "generations": [],
+      "history": ["Gen 0: 19/19 直接通过（遗传自 ATU-002 的原子 SQL 性状）"], "retryCount": 0
+    }
+  ],
+  "events": [
+    {"type":"atu_start","atu_id":"ATU-001","description":"ATU-001 开始"},
+    {"type":"gen_start","atu_id":"ATU-001","description":"Gen 1"},
+    {"type":"gen_variation","atu_id":"ATU-001","description":"sample1(Decorator-First) vs sample2(Stackable Chain)"},
+    {"type":"gen_selection","atu_id":"ATU-001","description":"6/6 vs 6/6 → sample1"},
+    {"type":"gen_retention","atu_id":"ATU-001","description":"装饰器+元组验证+序列化+201"},
+    {"type":"evolution_complete","atu_id":"ATU-001","description":"Done Gen1"},
+    {"type":"atu_end","atu_id":"ATU-001","description":"Done"},
+    {"type":"atu_start","atu_id":"ATU-002","description":"ATU-002 开始（含交叉遗传）"},
+    {"type":"gen_start","atu_id":"ATU-002","description":"Gen 1"},
+    {"type":"gen_variation","atu_id":"ATU-002","description":"sample1(Guard-Clause+RawSQL) vs sample2(Exception-Driven)"},
+    {"type":"gen_selection","atu_id":"ATU-002","description":"7/7 vs 3/7 → sample1"},
+    {"type":"gen_retention","atu_id":"ATU-002","description":"guard clause+_fail()+atomic SQL"},
+    {"type":"evolution_complete","atu_id":"ATU-002","description":"Done Gen1"},
+    {"type":"atu_end","atu_id":"ATU-002","description":"Done"},
+    {"type":"atu_start","atu_id":"ATU-003","description":"ATU-003 开始（含交叉遗传）"},
+    {"type":"gen_start","atu_id":"ATU-003","description":"Gen 1"},
+    {"type":"gen_variation","atu_id":"ATU-003","description":"sample1(_coerce_origin) vs sample2(DEFAULT_ORIGIN常量)"},
+    {"type":"gen_selection","atu_id":"ATU-003","description":"15/15 vs 15/15 → sample1"},
+    {"type":"gen_retention","atu_id":"ATU-003","description":"_coerce_origin+_serialize_order+_ORIGIN_DEFAULT+nullable=False"},
+    {"type":"evolution_complete","atu_id":"ATU-003","description":"Done Gen1"},
+    {"type":"atu_end","atu_id":"ATU-003","description":"Done"},
+    {"type":"atu_start","atu_id":"ATU-004","description":"ATU-004 开始（含交叉遗传）"},
+    {"type":"gen_start","atu_id":"ATU-004","description":"Gen 1"},
+    {"type":"gen_variation","atu_id":"ATU-004","description":"sample1(SlidingWindow+app.extensions) vs sample2(RateLimiter单例)"},
+    {"type":"gen_selection","atu_id":"ATU-004","description":"19/19 vs 10/19 → sample1（sample2: 测试状态泄漏）"},
+    {"type":"gen_retention","atu_id":"ATU-004","description":"SlidingWindowRateLimiter+current_app.extensions+check_rate_limit"},
+    {"type":"evolution_complete","atu_id":"ATU-004","description":"Done Gen1"},
+    {"type":"atu_end","atu_id":"ATU-004","description":"Done"},
+    {"type":"atu_start","atu_id":"ATU-005","description":"ATU-005 遗传性状直接满足"},
+    {"type":"evolution_complete","atu_id":"ATU-005","description":"19/19 直接通过（0代变异）"},
+    {"type":"atu_end","atu_id":"ATU-005","description":"Done"}
+  ],
+  "tokenLog": []
+}

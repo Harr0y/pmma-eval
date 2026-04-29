@@ -1,0 +1,76 @@
+{
+  "taskId": "T1-1-todo-cli",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": [
+      "ATU-001"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现 main() 函数（add/list/remove）",
+      "description": "实现 todo.py 的 main() 函数，支持三个命令：add（追加任务到文件）、list（打印 ID: 内容）、remove（按行号删除任务）。需要处理特殊字符、空列表、无效ID等边界情况。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/todo.py"
+      ],
+      "history": [
+        {
+          "action": "To Do → In Progress",
+          "detail": "从 To Do 拉入 In Progress，委派 Developer"
+        },
+        {
+          "action": "In Progress → In Review",
+          "detail": "Developer 完成，委派 Tester"
+        },
+        {
+          "action": "In Review → Done",
+          "detail": "测试通过 + 审查通过，移至 Done"
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "看板初始化完成，1个ATU待处理",
+      "timestamp": "2026-04-26T16:59:37.295Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:00:08.790Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：4/4 全部通过",
+      "timestamp": "2026-04-26T17:00:54.731Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:01:22.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:01:18.797Z"
+    }
+  ],
+  "tokenLog": []
+}

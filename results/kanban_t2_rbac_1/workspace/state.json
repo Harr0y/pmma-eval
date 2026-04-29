@@ -1,0 +1,108 @@
+{
+  "taskId": "kanban_t2_rbac_1",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现登录接口 (routes_auth.py)",
+      "description": "实现 POST /login 登录接口：验证用户名密码，返回 JWT token（含 user_id, tenant_id, exp）。错误处理：400 缺少参数，401 凭据无效。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/routes_auth.py"],
+      "history": [
+        {"action": "start", "note": "Developer 完成 routes_auth.py 实现"},
+        {"action": "review", "note": "Tester 有条件通过，Reviewer 审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "实现 POST /login：验证 username/password，返回 JWT token（user_id, tenant_id, exp）。400 缺少参数，401 凭据无效。使用 middleware.hash_password() 验证密码，PyJWT 生成 token。"
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现角色管理接口 (routes_role.py)",
+      "description": "实现角色 CRUD 和用户角色分配：POST /roles（创建角色）、GET /roles（列出本 tenant 角色）、PUT /roles/<id>/permissions（更新权限+parent）、POST /users/<id>/roles（分配角色）、DELETE /users/<id>/roles/<role_id>（移除角色）。需检测继承链循环。",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "L",
+      "priority": 2,
+      "files": ["starter/routes_role.py"],
+      "history": [
+        {"action": "start", "note": "Developer 完成 routes_role.py 实现"},
+        {"action": "review", "note": "Tester 全部通过，Reviewer 审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "实现 5 个端点：POST /roles（创建角色，409 重名检测）、GET /roles（列出 tenant 角色）、PUT /roles/<id>/permissions（更新权限+parent，含循环检测）、POST /users/<id>/roles（分配角色，跨 tenant 403）、DELETE /users/<id>/roles/<role_id>（移除角色，幂等）。辅助函数：_role_to_dict, _detect_cycle, _set_role_permissions。"
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现文档 CRUD 接口 (routes_document.py)",
+      "description": "实现文档 CRUD 带 RBAC：GET /documents（doc.read，本 tenant）、GET /documents/<id>（doc.read+同 tenant）、POST /documents（doc.write）、PUT /documents/<id>（doc.write+owner 或 doc.write.any）、DELETE /documents/<id>（doc.delete）。",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "M",
+      "priority": 3,
+      "files": ["starter/routes_document.py"],
+      "history": [
+        {"action": "start", "note": "Developer 完成 routes_document.py 实现"},
+        {"action": "review", "note": "Tester 全部通过，Reviewer 审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "实现 5 个端点：GET /documents（doc.read，tenant 过滤）、GET /documents/<id>（doc.read+tenant 404）、POST /documents（doc.write，201）、PUT /documents/<id>（require_auth+手动双层权限：doc.write+owner/doc.write.any）、DELETE /documents/<id>（doc.delete+tenant 404）。辅助函数：_doc_to_dict。PUT 用 require_auth 而非 check_permission 以支持手动权限检查。"
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:29:41.163Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:30:52.117Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:31:13.772Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:31:13.776Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：全部通过（19/19）",
+      "timestamp": "2026-04-26T17:32:43.695Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:33:07.805Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:33:07.808Z"
+    }
+  ],
+  "tokenLog": []
+}

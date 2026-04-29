@@ -1,0 +1,178 @@
+{
+  "taskId": "T2-1-blog-tag-management",
+  "method": "evolutionary",
+  "startTime": "2026-04-26T00:00:00.000Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "装饰器验证模式：将输入验证逻辑抽取为可复用装饰器（如@require_name），保持路由处理器专注于业务逻辑",
+      "统一响应构建器：使用_ok(data, status)和_err(message, status)辅助函数确保所有端点响应格式一致",
+      "序列化辅助函数：将ORM对象到dict的转换集中管理（如_serialize_tag），避免内联构建dict",
+      "现代SQLAlchemy 2.0 API：使用db.session.get(Model, id)替代已弃用的Query.get()",
+      "显式关联表清理：删除实体时显式清理多对多关联表（如article_tags.delete().where(...)），而非依赖隐式级联",
+      "Validator class模式：将输入验证封装为有状态对象（如_ArticleValidator），支持require_fields()和require_tag_ids()等链式验证",
+      "集中式实体加载：将'加载实体或返回错误'模式统一封装（如_load_article），所有路由处理器保持声明式",
+      "Relationship-driven标签操作：通过article.tags.append()/remove()操作关联，利用ORM处理底层关联表",
+      "反向relationship遍历筛选：按标签筛选文章时通过tag.articles.all()反向遍历，充分利用backref"
+    ],
+    "architecturalNotes": [
+      "Blueprint模式：每个模块使用独立的Blueprint注册路由",
+      "测试使用sqlite:///:memory:内存数据库，每次测试前drop_all+create_all",
+      "多模块项目中各模块之间的接口（模型字段名、关联表名）需保持一致"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Tag CRUD Routes (routes_tag.py)",
+      "description": "实现标签的增删改查路由：POST /tags（创建）、GET /tags（列表）、PUT /tags/<id>（编辑）、DELETE /tags/<id>（删除）。测试类：TestTagCRUD（6 个测试）。",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": [
+        "routes_tag.py"
+      ],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "6/6", "passed": true, "notes": "无警告，使用现代SQLAlchemy 2.0 API"},
+            {"name": "sample2", "score": "6/6", "passed": true, "notes": "2个LegacyAPIWarning：使用了已弃用的Query.get()"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "装饰器验证模式(@require_name)：输入验证与业务逻辑分离",
+            "统一响应构建器(_ok/_err)：确保响应格式一致性",
+            "序列化辅助函数(_serialize_tag)：集中ORM到dict转换",
+            "现代SQLAlchemy 2.0 API(db.session.get)：避免弃用警告",
+            "显式关联表清理(article_tags.delete().where)：确保多对多关系完整清理"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Article Routes Complete (routes_article.py)",
+      "description": "实现文章 CRUD + 标签绑定 + 按标签筛选路由。测试类：TestArticleCRUD（4 个）、TestArticleTagBinding（4 个）、TestFilterArticlesByTag（4 个），共 12 个测试。",
+      "status": "done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "M",
+      "files": [
+        "routes_article.py"
+      ],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "18/18", "passed": true, "notes": "Validator class模式，relationship-driven标签操作"},
+            {"name": "sample2", "score": "18/18", "passed": true, "notes": "内联验证，显式JOIN查询，原子标签绑定"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "Validator class模式(_ArticleValidator)：有状态验证对象，支持链式验证",
+            "集中式实体加载(_load_article)：'加载或返回错误'模式统一封装",
+            "Relationship-driven标签操作(article.tags.append/remove)：利用ORM处理关联",
+            "反向relationship遍历筛选(tag.articles.all())：充分利用backref进行标签筛选"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "TDD 测试先行，测试已存在（TestTagCRUD，6 个测试），红阶段确认：6/6 失败",
+      "timestamp": "2026-04-26T09:38:23.671Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始",
+      "timestamp": "2026-04-26T09:38:23.674Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 Developer 生成 sample1 和 sample2 变体",
+      "timestamp": "2026-04-26T09:38:23.675Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 6/6 通过（无警告）, sample2: 6/6 通过（2 个 LegacyAPIWarning）。最优样本: sample1",
+      "timestamp": "2026-04-26T09:39:42.243Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：1)装饰器验证模式(@require_name) 2)统一响应构建器(_ok/_err) 3)序列化辅助函数(_serialize_tag) 4)现代SQLAlchemy 2.0 API(db.session.get) 5)显式关联表清理",
+      "timestamp": "2026-04-26T09:40:00.235Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功，ATU-001 完成（sample1 全部通过，无警告）",
+      "timestamp": "2026-04-26T09:40:30.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:40:30.000Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行，测试已存在（12 个测试），红阶段确认：12/12 失败",
+      "timestamp": "2026-04-26T09:40:40.181Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始，注入 ATU-001 交叉遗传材料",
+      "timestamp": "2026-04-26T09:40:40.184Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 sample1 和 sample2 变体（含 ATU-001 遗传材料）",
+      "timestamp": "2026-04-26T09:40:40.185Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 18/18 通过（Validator class 模式）, sample2: 18/18 通过（显式 JOIN 模式）。最优样本: sample1",
+      "timestamp": "2026-04-26T09:42:49.960Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：1)Validator class模式(_ArticleValidator) 2)集中式实体加载(_load_article) 3)Relationship-driven标签操作 4)反向relationship遍历筛选",
+      "timestamp": "2026-04-26T09:42:57.692Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成（sample1 全部通过）",
+      "timestamp": "2026-04-26T09:43:30.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:43:30.000Z"
+    }
+  ],
+  "tokenLog": []
+}

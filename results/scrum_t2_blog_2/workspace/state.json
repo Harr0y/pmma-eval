@@ -1,0 +1,171 @@
+{
+  "taskId": "scrum_t2_blog_2",
+  "method": "scrum",
+  "startTime": "2026-04-26T19:41:00.000Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 1,
+  "productBacklog": [],
+  "sprintBacklog": [],
+  "sprintGoal": "完成博客系统所有 API 接口实现，使 test_basic.py 全部通过",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现标签 CRUD 路由",
+      "description": "在 routes_tag.py 中实现标签的增删改查：POST /tags（创建，name必填不可重复，400/409）、GET /tags（列表）、PUT /tags/<id>（编辑，404/400/409）、DELETE /tags/<id>（删除，级联解除关联，404）",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": [
+        "starter/routes_tag.py"
+      ],
+      "history": [
+        {
+          "round": 1,
+          "action": "Developer 实现标签 CRUD 路由，Tester 测试 6/6 通过，Reviewer 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现文章 CRUD 路由",
+      "description": "在 routes_article.py 中实现文章的增删改查：POST /articles（创建，title/body必填，400）、GET /articles（列表）、GET /articles/<id>（详情，404）",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 2,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        {
+          "round": 1,
+          "action": "Developer 实现文章 CRUD 路由，Tester 测试 4/4 通过，Reviewer 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现文章-标签绑定路由",
+      "description": "在 routes_article.py 中实现文章与标签的关联操作：POST /articles/<id>/tags（绑定标签，404/400）、GET /articles/<id>/tags（获取标签列表，404）、DELETE /articles/<id>/tags/<tag_id>（解除关联，404）",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001",
+        "ATU-002"
+      ],
+      "complexity": "M",
+      "priority": 3,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        {
+          "round": 1,
+          "action": "Developer 顺带实现文章-标签绑定路由，Tester 测试 4/4 通过，Reviewer 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "实现按标签筛选文章",
+      "description": "在 routes_article.py 的 GET /articles 中添加可选查询参数 ?tag=<name> 和 ?tag_id=<id>，支持按标签名称或标签ID筛选文章，无匹配返回空列表",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001",
+        "ATU-002"
+      ],
+      "complexity": "S",
+      "priority": 4,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        {
+          "round": 1,
+          "action": "Developer 顺带实现按标签筛选功能，Tester 测试 4/4 通过，Reviewer 审查通过"
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "初始化完成 — Product Backlog 包含 4 个 ATU：ATU-001(标签CRUD), ATU-002(文章CRUD), ATU-003(文章-标签绑定), ATU-004(按标签筛选文章)",
+      "timestamp": "2026-04-26T11:42:14.309Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — Sprint Goal: 完成博客系统所有 API 接口实现，使 test_basic.py 全部通过。Sprint Backlog: ATU-001, ATU-002, ATU-003, ATU-004",
+      "timestamp": "2026-04-26T11:42:39.091Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Standup — Developer 准备实现 ATU-001 + ATU-002；Tester/Reviewer 待命",
+      "timestamp": "2026-04-26T11:42:46.761Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现标签 CRUD 路由",
+      "timestamp": "2026-04-26T11:42:46.762Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "Sprint 1 Round 1 — 开始实现文章 CRUD 路由",
+      "timestamp": "2026-04-26T11:42:46.762Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成 — 标签 CRUD 路由实现，6 个测试全部通过，审查通过",
+      "timestamp": "2026-04-26T11:44:25.173Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成 — 文章 CRUD 路由实现，4 个测试全部通过，审查通过",
+      "timestamp": "2026-04-26T11:44:25.176Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "Sprint 1 Round 1 — Developer 顺带实现文章-标签绑定路由",
+      "timestamp": "2026-04-26T11:44:25.180Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成 — 文章-标签绑定路由实现，4 个测试全部通过，审查通过",
+      "timestamp": "2026-04-26T11:44:25.182Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "Sprint 1 Round 1 — Developer 顺带实现按标签筛选功能",
+      "timestamp": "2026-04-26T11:44:25.184Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 完成 — 按标签筛选文章功能实现，4 个测试全部通过，审查通过",
+      "timestamp": "2026-04-26T11:44:25.188Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — 全部 4 个 ATU 在 Round 1 完成，Sprint Goal 达成",
+      "timestamp": "2026-04-26T11:44:34.696Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：Developer 一次性实现所有功能，零重试。改进：Model.query.get() 有弃用警告，后续可迁移到 db.session.get()",
+      "timestamp": "2026-04-26T11:44:34.702Z"
+    }
+  ],
+  "tokenLog": []
+}

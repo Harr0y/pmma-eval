@@ -1,0 +1,88 @@
+{
+  "taskId": "kanban_t2_blog_2",
+  "method": "kanban",
+  "startTime": "2026-04-27T01:07:00.000Z",
+  "endTime": "2026-04-27T01:12:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Tag CRUD routes",
+      "description": "实现 routes_tag.py 中的标签 CRUD 路由",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": ["starter/routes_tag.py"],
+      "history": [
+        {"action": "To Do → In Progress", "note": "拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成，提交测试和审查"},
+        {"action": "In Review → Done", "note": "测试 6/6 通过，审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改了 starter/routes_tag.py。实现了 4 个路由。"
+    },
+    {
+      "id": "ATU-002",
+      "title": "Article CRUD + Tag binding + filtering routes",
+      "description": "实现 routes_article.py 中的文章路由",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "L",
+      "priority": 2,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "To Do → In Progress", "note": "ATU-001 Done 后拉入，委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成，提交测试和审查"},
+        {"action": "In Review → Done", "note": "全部 18/18 测试通过，审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改了 starter/routes_article.py。实现了 6 个路由：POST /articles (创建, 201/400), GET /articles (列出所有, 支持 ?tag=name 和 ?tag_id=id 筛选, 200), GET /articles/<id> (获取单篇, 200/404), POST /articles/<id>/tags (绑定标签, 200/404/400), GET /articles/<id>/tags (获取标签, 200/404), DELETE /articles/<id>/tags/<tag_id> (解除绑定, 200/404)。使用 SQLAlchemy 2.0 风格查询，ORM 关系管理 article_tags 关联。"
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer 实现标签 CRUD 路由",
+      "timestamp": "2026-04-26T17:08:15.027Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，ATU-001 Tag CRUD 相关 6/6 通过，有条件通过",
+      "timestamp": "2026-04-26T17:09:43.375Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:10:00.030Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer 实现文章路由",
+      "timestamp": "2026-04-26T17:10:00.033Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，ATU-002 全部 18/18 测试通过",
+      "timestamp": "2026-04-26T17:11:19.605Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，全部 18/18 测试通过，移至 Done",
+      "timestamp": "2026-04-26T17:11:39.924Z"
+    }
+  ],
+  "tokenLog": []
+}

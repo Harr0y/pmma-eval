@@ -1,0 +1,151 @@
+{
+  "taskId": "kanban_t3_ecommerce_2",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00.000Z",
+  "endTime": "2026-04-26T18:00:00.000Z",
+  "changeInjected": true,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003", "ATU-004"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "完善数据模型 models.py（Order 新增 origin 字段）",
+      "description": "在 Order 模型中新增 origin 字段（字符串，默认值 'web'）。确保与其他模块的接口兼容。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/models.py"],
+      "history": [
+        {"action": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "Developer 完成：在 Order 模型添加 origin 字段（String(20), nullable=False, default='web'）"},
+        {"action": "Tester：有条件通过（路由未实现导致 18 个测试失败，但本 ATU 代码正确）"},
+        {"action": "Reviewer：审查通过"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "完善中间件 middleware.py（新增限流功能）",
+      "description": "在 middleware.py 中新增限流功能：同一用户（基于 user_id）在 10 秒内只能成功提交 1 笔订单。超过频率的请求返回 HTTP 429。提供一个 check_rate_limit(user_id) 函数供路由调用。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 2,
+      "files": ["starter/middleware.py"],
+      "history": [
+        {"action": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "Developer 完成：新增 check_rate_limit(user_id) 函数，返回 (bool, int)；使用内存字典记录最后下单时间，10秒窗口"},
+        {"action": "Tester：有条件通过（路由未实现导致测试失败，但本 ATU 代码正确）"},
+        {"action": "Reviewer：审查通过"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现产品管理路由 routes_product.py",
+      "description": "实现 GET /products（列出所有产品）和 POST /products（创建产品，Admin only）。使用 middleware.get_current_user() 认证。非 admin 返回 403，无 X-User-Id 返回 401。Blueprint 名称为 product_bp。",
+      "status": "Done",
+      "dependencies": ["ATU-001", "ATU-002"],
+      "complexity": "M",
+      "priority": 3,
+      "files": ["starter/routes_product.py"],
+      "history": [
+        {"action": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "Developer 完成：实现 GET /products 和 POST /products（Admin only），含 401/403/400 错误处理"},
+        {"action": "Tester：19/19 全部通过"},
+        {"action": "Reviewer：审查通过"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "实现订单管理路由 routes_order.py",
+      "description": "实现 POST /orders（用户下单，扣减库存，支持 origin 参数，集成限流，原子性库存扣减）和 GET /orders（Admin 看所有订单，普通用户只看自己的）。库存不足返回 error。total_price = price * quantity。Blueprint 名称为 order_bp。",
+      "status": "Done",
+      "dependencies": ["ATU-001", "ATU-002"],
+      "complexity": "L",
+      "priority": 4,
+      "files": ["starter/routes_order.py", "starter/middleware.py"],
+      "history": [
+        {"action": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "Developer 完成：实现 POST /orders（含限流、原子库存扣减、origin 支持）和 GET /orders（RBAC 过滤）；同时优化 middleware.py 限流存储为 per-app-instance"},
+        {"action": "Tester：19/19 全部通过"},
+        {"action": "Reviewer：审查通过"}
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:53:54.133Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:53:54.136Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：1 通过 / 18 失败（全部因路由未实现），有条件通过",
+      "timestamp": "2026-04-26T17:55:19.535Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:55:19.538Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:55:19.539Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:55:53.558Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:55:53.561Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行完整测试（ATU-003 + ATU-004 开发完成后）",
+      "timestamp": "2026-04-26T17:58:42.196Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行完整测试，结果：19/19 全部通过",
+      "timestamp": "2026-04-26T17:59:05.746Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试（19/19）和审查，移至 Done",
+      "timestamp": "2026-04-26T17:59:41.393Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "通过测试（19/19）和审查，移至 Done",
+      "timestamp": "2026-04-26T17:59:41.396Z"
+    }
+  ],
+  "tokenLog": []
+}

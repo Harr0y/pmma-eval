@@ -1,0 +1,143 @@
+{
+  "taskId": "scrum_t2_blog_3",
+  "method": "scrum",
+  "startTime": "2026-04-26T00:00:00.000Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 2,
+  "productBacklog": [],
+  "sprintBacklog": [],
+  "sprintGoal": "完成博客系统全部 API 接口实现，通过所有测试用例",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现 Tag CRUD 路由 (routes_tag.py)",
+      "description": "在 routes_tag.py 中实现标签的增删改查路由：POST /tags（创建标签，name必填不可重复）、GET /tags（获取所有标签）、PUT /tags/<id>（编辑标签名称）、DELETE /tags/<id>（删除标签并解除关联）。返回格式：成功 {status: ok, data: ...}，错误 {status: error, message: ...}。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": [
+        "starter/routes_tag.py"
+      ],
+      "history": [
+        "Developer 完成 Tag CRUD 4个路由实现，6个Tag测试通过",
+        "Tester 验证 6/6 Tag CRUD 测试通过",
+        "Reviewer 审查通过 — 功能正确性、测试覆盖、无破坏性变更均通过"
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现 Article CRUD + 标签绑定/筛选路由 (routes_article.py)",
+      "description": "在 routes_article.py 中实现文章的增删改查及标签绑定路由：GET /articles（列出所有文章，可选 ?tag=name 或 ?tag_id=id 筛选）、POST /articles（创建文章）、GET /articles/<id>（获取单篇）、POST /articles/<id>/tags（绑定标签）、GET /articles/<id>/tags（获取文章标签）、DELETE /articles/<id>/tags/<tag_id>（解除关联）。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "L",
+      "priority": 2,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        "Developer 完成 Article CRUD + 标签绑定/筛选 6个路由实现，18/18测试全部通过",
+        "Tester 验证 18/18 测试全部通过（4 Article CRUD + 4 ArticleTagBinding + 4 FilterArticlesByTag + 6 TagCRUD）",
+        "Reviewer 审查通过 — 6个端点功能全部正确，响应格式一致，无阻塞问题"
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "初始化完成 — Product Backlog 包含 ATU-001（Tag CRUD）和 ATU-002（Article CRUD + 标签绑定筛选），共 2 个 ATU",
+      "timestamp": "2026-04-26T11:45:36.753Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — 选取 ATU-001, ATU-002 进入 Sprint Backlog，Sprint Goal：完成全部 API 实现并通过测试",
+      "timestamp": "2026-04-26T11:45:36.755Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Standup — Developer 准备实现 ATU-001，Tester 待命，Reviewer 待命",
+      "timestamp": "2026-04-26T11:45:48.835Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现 ATU-001 Tag CRUD 路由",
+      "timestamp": "2026-04-26T11:45:48.837Z"
+    },
+    {
+      "type": "note",
+      "description": "ATU-001 Developer 完成 — 实现了 Tag CRUD 4个路由，6个测试通过",
+      "timestamp": "2026-04-26T11:46:30.511Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Sprint 1 Round 1 — Tester 运行测试验证 ATU-001",
+      "timestamp": "2026-04-26T11:46:30.513Z"
+    },
+    {
+      "type": "note",
+      "description": "ATU-001 Tester 报告 — 6/6 Tag CRUD 测试通过，12 个 Article 相关测试因 ATU-002 未实现而失败（预期内）",
+      "timestamp": "2026-04-26T11:47:04.980Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 审查通过 — Tag CRUD 路由实现完成，6/6 测试通过，Reviewer 确认无阻塞问题",
+      "timestamp": "2026-04-26T11:47:25.869Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 2 Standup — ATU-001 Done，Developer 准备实现 ATU-002",
+      "timestamp": "2026-04-26T11:47:37.144Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "Sprint 1 Round 2 — 开始实现 ATU-002 Article CRUD + 标签绑定/筛选路由",
+      "timestamp": "2026-04-26T11:47:37.146Z"
+    },
+    {
+      "type": "note",
+      "description": "ATU-002 Developer 完成 — 实现了 Article CRUD + 标签绑定/筛选 6个路由，18/18 测试全部通过",
+      "timestamp": "2026-04-26T11:48:17.500Z"
+    },
+    {
+      "type": "test_run",
+      "description": "ATU-002 Tester 报告 — 18/18 测试全部通过，Sprint Goal 已达成",
+      "timestamp": "2026-04-26T11:48:37.388Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 审查通过 — Article CRUD + 标签绑定/筛选 6个路由实现完成，18/18 测试通过，Reviewer 确认无阻塞问题",
+      "timestamp": "2026-04-26T11:48:58.202Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — 全部 2 个 ATU 完成，18/18 测试通过，Sprint Goal 达成",
+      "timestamp": "2026-04-26T11:49:15.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — Sprint 仅用 2 轮即完成全部工作，效率极高；非阻塞项：Query.get() 废弃警告待后续迁移",
+      "timestamp": "2026-04-26T11:49:15.002Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — 全部 2 个 ATU 完成，18/18 测试通过，Sprint Goal 达成",
+      "timestamp": "2026-04-26T11:49:22.937Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — Sprint 仅用 2 轮即完成全部工作，效率极高；非阻塞项：Query.get() 废弃警告待后续迁移",
+      "timestamp": "2026-04-26T11:49:22.940Z"
+    }
+  ],
+  "tokenLog": []
+}

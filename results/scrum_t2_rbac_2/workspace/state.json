@@ -1,0 +1,101 @@
+{
+  "taskId": "T2-3-RBAC",
+  "method": "scrum",
+  "startTime": "2026-04-26T00:00:00Z",
+  "endTime": "2026-04-26T12:25:00Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 5,
+  "productBacklog": [],
+  "sprintBacklog": [],
+  "sprintGoal": "完成 RBAC 系统全部接口实现并通过测试",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现 POST /login 认证接口",
+      "description": "在 routes_auth.py 中实现登录接口：接收 username/password，验证密码（middleware.hash_password），返回 JWT（含 user_id, tenant_id, exp）。错误处理：400 参数缺失，401 凭据无效。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/routes_auth.py"],
+      "history": [
+        {"event": "Developer 完成 ATU-001 实现", "files": ["starter/routes_auth.py"]},
+        {"event": "Tester 验证通过（login 功能正常）", "round": 1},
+        {"event": "Reviewer 审查通过", "round": 1}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现角色管理路由",
+      "description": "在 routes_role.py 中实现全部角色管理接口：POST /roles（创建角色，需要 role.manage），GET /roles（列出本 tenant 角色），PUT /roles/<id>/permissions（替换权限集 + 更新 parent，含继承链循环检测），POST /users/<id>/roles（分配角色），DELETE /users/<id>/roles/<role_id>（移除角色，幂等）。所有接口需要 role.manage 权限。",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "L",
+      "priority": 2,
+      "files": ["starter/routes_role.py"],
+      "history": [
+        {"event": "Developer 完成 ATU-002 实现（5 个接口）", "files": ["starter/routes_role.py"]},
+        {"event": "Tester 验证通过（4/4 ATU-002 相关测试通过）", "round": 2},
+        {"event": "Reviewer 审查通过", "round": 2}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现文档 CRUD 路由",
+      "description": "在 routes_document.py 中实现全部文档接口：GET /documents（doc.read，本 tenant），GET /documents/<id>（doc.read + 同 tenant，否则 404），POST /documents（doc.write），PUT /documents/<id>（doc.write + owner 或 doc.write.any），DELETE /documents/<id>（doc.delete + 同 tenant）。多租户隔离。",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "L",
+      "priority": 3,
+      "files": ["starter/routes_document.py"],
+      "history": [
+        {"event": "Developer 完成 ATU-003 实现（5 个接口）", "files": ["starter/routes_document.py"]},
+        {"event": "Tester 独立验证 19/19 全部通过", "round": 3},
+        {"event": "Reviewer 审查通过", "round": 3},
+        {"event": "回归测试 19/19 通过（稳定）", "round": 4}
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {"type": "atu_start", "atu_id": "ATU-000", "description": "Scrum 项目初始化 — 创建 Product Backlog，分解为 3 个 ATU", "timestamp": "2026-04-26T12:16:49.659Z"},
+    {"type": "note", "description": "Product Backlog 初始化完成：ATU-001（认证接口）、ATU-002（角色管理）、ATU-003（文档 CRUD）", "timestamp": "2026-04-26T12:17:08.460Z"},
+    {"type": "note", "description": "Sprint 1 Planning — 选取 ATU-001, ATU-002, ATU-003 进入 Sprint Backlog。Sprint Goal: 完成 RBAC 系统全部接口实现并通过测试", "timestamp": "2026-04-26T12:17:11.837Z"},
+    {"type": "note", "description": "Sprint 1 Round 1 Standup — Sprint 开始，准备实现 ATU-001（认证接口）", "timestamp": "2026-04-26T12:17:28.514Z"},
+    {"type": "atu_start", "atu_id": "ATU-001", "description": "Sprint 1 Round 1 — 开始实现 ATU-001（POST /login 认证接口）", "timestamp": "2026-04-26T12:17:35.000Z"},
+    {"type": "atu_end", "atu_id": "ATU-001", "description": "ATU-001 审查通过，POST /login 认证接口实现完成", "timestamp": "2026-04-26T12:19:29.998Z"},
+    {"type": "note", "description": "Sprint 1 Round 2 Standup — ATU-001 Done，开始 ATU-002（角色管理路由）", "timestamp": "2026-04-26T12:19:48.716Z"},
+    {"type": "atu_end", "atu_id": "ATU-002", "description": "ATU-002 审查通过，角色管理路由 5 个接口全部实现完成", "timestamp": "2026-04-26T12:22:28.667Z"},
+    {"type": "note", "description": "Sprint 1 Round 3 Standup — ATU-001 ✅ ATU-002 ✅，开始 ATU-003（文档 CRUD 路由）", "timestamp": "2026-04-26T12:22:42.458Z"},
+    {"type": "atu_end", "atu_id": "ATU-003", "description": "ATU-003 审查通过，文档 CRUD 5 个接口全部实现，19/19 测试通过", "timestamp": "2026-04-26T12:23:44.284Z"},
+    {"type": "note", "description": "Sprint 1 Round 4 Standup — 全部 ATU 完成，19/19 测试通过，进入回归验证阶段", "timestamp": "2026-04-26T12:23:54.408Z"},
+    {"type": "test_run", "description": "Sprint 1 Round 4 回归测试 19/19 通过，结果稳定", "timestamp": "2026-04-26T12:24:10.000Z"},
+    {"type": "note", "description": "Sprint 1 Round 5 Standup — 全部 ATU 完成，测试稳定，准备 Sprint Review", "timestamp": "2026-04-26T12:24:22.028Z"},
+    {"type": "note", "description": "Sprint 1 Review — Sprint Goal 完全达成：3 个 ATU 全部 Done，19/19 测试通过", "timestamp": "2026-04-26T12:24:32.877Z"},
+    {"type": "note", "description": "Sprint 1 Retrospective — Sprint 提前 2 轮完成；依赖分析准确、信息中继有效；改进项：datetime.utcnow 弃用、Query.get legacy API", "timestamp": "2026-04-26T12:24:32.878Z"},
+    {"type": "atu_end", "atu_id": "ATU-000", "description": "项目完成 — T2-3 RBAC 权限管理系统全部实现，19/19 测试通过", "timestamp": "2026-04-26T12:25:00.000Z"}
+  ],
+  "tokenLog": [
+    {"phase": "planning", "description": "Sprint 1 Planning 仪式开销"},
+    {"phase": "standup", "round": 1, "description": "Sprint 1 Round 1 Standup"},
+    {"phase": "developer", "atu_id": "ATU-001", "description": "Developer 实现 ATU-001"},
+    {"phase": "tester", "atu_id": "ATU-001", "description": "Tester 验证 ATU-001"},
+    {"phase": "reviewer", "atu_id": "ATU-001", "description": "Reviewer 审查 ATU-001"},
+    {"phase": "standup", "round": 2, "description": "Sprint 1 Round 2 Standup"},
+    {"phase": "developer", "atu_id": "ATU-002", "description": "Developer 实现 ATU-002"},
+    {"phase": "tester", "atu_id": "ATU-002", "description": "Tester 验证 ATU-002"},
+    {"phase": "reviewer", "atu_id": "ATU-002", "description": "Reviewer 审查 ATU-002"},
+    {"phase": "standup", "round": 3, "description": "Sprint 1 Round 3 Standup"},
+    {"phase": "developer", "atu_id": "ATU-003", "description": "Developer 实现 ATU-003"},
+    {"phase": "tester", "atu_id": "ATU-003", "description": "Tester 独立验证 ATU-003"},
+    {"phase": "reviewer", "atu_id": "ATU-003", "description": "Reviewer 审查 ATU-003"},
+    {"phase": "standup", "round": 4, "description": "Sprint 1 Round 4 Standup"},
+    {"phase": "tester", "description": "Sprint 1 Round 4 回归测试"},
+    {"phase": "standup", "round": 5, "description": "Sprint 1 Round 5 Standup"},
+    {"phase": "review", "description": "Sprint 1 Review"},
+    {"phase": "retrospective", "description": "Sprint 1 Retrospective"}
+  ]
+}

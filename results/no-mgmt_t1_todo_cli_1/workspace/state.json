@@ -1,0 +1,12 @@
+{
+  "taskId": "T1-1",
+  "method": "no-mgmt",
+  "startTime": "2026-04-27T02:05:00.000Z",
+  "changeInjected": false,
+  "status": "Done",
+  "events": [
+    {"type": "task_start", "description": "开始实现 todo.py 的 add/list/remove 命令"},
+    {"type": "test_run", "description": "运行 pytest，4 个测试全部通过"},
+    {"type": "task_end", "description": "todo.py 实现完成，所有测试通过"}
+  ]
+}

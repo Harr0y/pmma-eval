@@ -1,0 +1,180 @@
+{
+  "taskId": "T2-2-order-system",
+  "method": "evolutionary",
+  "startTime": "2026-04-26T18:00:00Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "集中式序列化辅助函数：_serialize_xxx() 将 ORM 对象转为 dict，单一变更点，保持路由函数简洁",
+      "多层防御验证策略：request.get_json(silent=True) → 检查 dict 类型 → 检查必填字段 → 检查字段类型，全部通过后才操作 DB",
+      "Fail-fast 原则：所有输入验证在 DB 写入之前完成，避免脏数据",
+      "响应格式标准化：{\"status\": \"ok/error\", \"data\": ...} / {\"status\": \"error\", \"message\": ...}",
+      "数据驱动状态机：ALLOWED_TRANSITIONS 字典 + _SIDE_EFFECT_REGISTRY 注册表，状态转换与副作用解耦",
+      "副作用处理器模式：每个状态转换有独立 handler，不同来源的同一目标状态分开处理（如 pending→cancel vs paid→cancel）",
+      "集中式转换引擎：_execute_transition() 统一入口，消除路由中的重复状态检查逻辑",
+      "聚合库存校验：使用 Counter 聚合同一 product_id 的多行 quantity，正确处理重复商品订单"
+    ],
+    "architecturalNotes": [
+      "Flask Blueprint 模式：每个路由文件定义自己的 bp，由 app.py 统一注册",
+      "sys.path.insert(0, os.path.dirname(__file__)) 确保 models.py 和 app.py 可被导入",
+      "db.session.flush() 用于获取自增 ID 后再创建关联记录，避免未提交状态"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "商品路由 CRUD (routes_product.py)",
+      "description": "实现 GET /products, POST /products, GET /products/<id> 三个商品管理路由。返回格式：{\"status\": \"ok\", \"data\": ...} 或 {\"status\": \"error\", \"message\": ...}",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "testCommand": "python -m pytest tests/test_basic.py::TestProductCRUD -v",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "3/3", "status": "passed"},
+            {"name": "sample2", "score": "3/3", "status": "passed"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "集中式序列化辅助函数 _serialize_product() 保持路由函数简洁",
+            "多层防御验证：JSON body 类型检查 → 必填字段检查 → 字段类型检查 → DB 写入",
+            "Fail-fast 策略：所有验证在 DB 操作之前完成",
+            "request.get_json(silent=True) 安全处理畸形 JSON"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "订单路由系统 (routes_order.py)",
+      "description": "实现完整的订单路由：创建订单(CRUD)、状态机(pending→paid→shipped→delivered, pending/paid→cancelled)、支付幂等性(Idempotency-Key)、库存扣减与回滚。",
+      "status": "done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "L",
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "testCommand": "python -m pytest tests/test_basic.py -k \"not TestProductCRUD\" -v",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "16/16", "status": "passed"},
+            {"name": "sample2", "score": "16/16", "status": "passed"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "数据驱动状态机 ALLOWED_TRANSITIONS 字典 + _SIDE_EFFECT_REGISTRY 注册表解耦状态转换与副作用",
+            "副作用处理器模式：_on_pay/_on_cancel_paid 等独立 handler，pending→cancel 和 paid→cancel 分开处理",
+            "集中式转换引擎 _execute_transition() 统一入口，消除路由中重复的状态检查逻辑",
+            "聚合库存校验：Counter 聚合同一 product_id 多行 quantity，正确处理重复商品",
+            "响应封装辅助函数 _ok()/_error() 统一响应格式",
+            "db.session.flush() 获取自增 ID 后再创建关联记录"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "测试已由项目提供(TestProductCRUD, 3 tests)，直接进入变异阶段",
+      "timestamp": "2026-04-26T09:57:37.980Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始",
+      "timestamp": "2026-04-26T09:57:37.984Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 Developer 生成 routes_product_sample1.py 和 routes_product_sample2.py 变体",
+      "timestamp": "2026-04-26T09:57:37.985Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 3/3 通过, sample2: 3/3 通过。两个样本均完全通过，选择 sample1 作为最优样本",
+      "timestamp": "2026-04-26T09:58:18.492Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：集中式序列化辅助函数、多层防御验证、Fail-fast 策略、安全 JSON 解析",
+      "timestamp": "2026-04-26T09:58:18.493Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功，ATU-001 完成（3/3 测试通过）",
+      "timestamp": "2026-04-26T09:58:18.494Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T09:58:18.495Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "测试已由项目提供(TestOrderCRUD + TestStateMachine + TestInventory + TestIdempotency, 16 tests)，注入 ATU-001 交叉遗传材料，进入变异阶段",
+      "timestamp": "2026-04-26T09:58:40.465Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始，注入 ATU-001 交叉遗传材料",
+      "timestamp": "2026-04-26T09:58:40.468Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 routes_order_sample1.py 和 routes_order_sample2.py 变体",
+      "timestamp": "2026-04-26T10:00:09.717Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 16/16 通过, sample2: 16/16 通过。两个样本均完全通过，选择 sample1 作为最优样本",
+      "timestamp": "2026-04-26T10:00:13.417Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：数据驱动状态机、副作用处理器模式、集中式转换引擎、聚合库存校验、响应封装函数",
+      "timestamp": "2026-04-26T10:00:13.418Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成（16/16 测试通过）",
+      "timestamp": "2026-04-26T10:00:13.419Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-26T10:00:13.420Z"
+    }
+  ],
+  "tokenLog": []
+}

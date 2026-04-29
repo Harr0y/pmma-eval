@@ -1,0 +1,180 @@
+{
+  "taskId": "scrum_t2_rbac_3",
+  "method": "scrum",
+  "startTime": "2026-04-26T00:00:00.000Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 1,
+  "productBacklog": [],
+  "sprintBacklog": [
+    "ATU-001",
+    "ATU-002",
+    "ATU-003"
+  ],
+  "sprintGoal": "完成全部 3 个 ATU（认证+角色管理+文档CRUD），使所有测试通过",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Implement POST /login (routes_auth.py)",
+      "description": "Implement the login route in routes_auth.py. POST /login accepts {username, password}, verifies credentials using middleware.hash_password(), returns JWT token containing user_id, tenant_id, and exp. Errors: 400 if missing fields, 401 if invalid credentials. Response format: {status: ok, data: {token: str}}.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/routes_auth.py"
+      ],
+      "history": [
+        {
+          "event": "Developer completed implementation",
+          "round": 1
+        },
+        {
+          "event": "Tester: 3/3 auth tests passed",
+          "round": 1
+        },
+        {
+          "event": "Reviewer: 审查通过",
+          "round": 1
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Implement role management routes (routes_role.py)",
+      "description": "Implement all role management routes in routes_role.py: POST /roles (create role, requires role.manage), GET /roles (list tenant roles, requires role.manage), PUT /roles/<id>/permissions (replace permissions + update parent, cycle detection), POST /users/<id>/roles (assign role, same-tenant check), DELETE /users/<id>/roles/<role_id> (remove role, idempotent). Must detect inheritance chain cycles.",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "L",
+      "priority": 2,
+      "files": [
+        "starter/routes_role.py"
+      ],
+      "history": [
+        {
+          "event": "Developer completed implementation",
+          "round": 1
+        },
+        {
+          "event": "Tester: 4/4 role management tests passed",
+          "round": 1
+        },
+        {
+          "event": "Reviewer: 审查通过",
+          "round": 1
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "Implement document routes (routes_document.py)",
+      "description": "Implement all document CRUD routes in routes_document.py: GET /documents (doc.read, own tenant only), GET /documents/<id> (doc.read + same tenant), POST /documents (doc.write), PUT /documents/<id> (doc.write + owner OR doc.write.any), DELETE /documents/<id> (doc.delete). Proper tenant isolation and 404 for cross-tenant access.",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "M",
+      "priority": 3,
+      "files": [
+        "starter/routes_document.py"
+      ],
+      "history": [
+        {
+          "event": "Developer completed implementation",
+          "round": 1
+        },
+        {
+          "event": "Tester: 12/12 document + multi-tenant + inheritance tests passed",
+          "round": 1
+        },
+        {
+          "event": "Reviewer: 审查通过",
+          "round": 1
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "scrum_t2_rbac_3",
+      "description": "Scrum 项目初始化 — Product Backlog 创建完毕，包含 3 个 ATU",
+      "timestamp": "2026-04-26T12:25:28.384Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — Sprint Goal: 完成全部 3 个 ATU 使测试通过。选取 ATU-001, ATU-002, ATU-003 进入 Sprint Backlog",
+      "timestamp": "2026-04-26T12:25:35.759Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Standup — Developer: 无进度，开始首个 ATU 实现。Tester: 无测试可跑，待首次实现后介入。Reviewer: 无代码可审查，待首次实现后介入。",
+      "timestamp": "2026-04-26T12:25:48.966Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现登录接口",
+      "timestamp": "2026-04-26T12:25:48.968Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 登录接口实现完成",
+      "timestamp": "2026-04-26T12:27:57.398Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 角色管理路由实现完成",
+      "timestamp": "2026-04-26T12:27:57.400Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 文档CRUD路由实现完成",
+      "timestamp": "2026-04-26T12:27:57.402Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 — 三个 ATU 开发完成，进入测试和审查阶段",
+      "timestamp": "2026-04-26T12:27:57.406Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Sprint 1 Round 1 — Tester: 19/19 测试全部通过（3 认证 + 4 角色管理 + 6 文档RBAC + 3 多租户 + 3 权限继承）",
+      "timestamp": "2026-04-26T12:28:10.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 完全达成。ATU-001 (Done), ATU-002 (Done), ATU-003 (Done)。19/19 测试通过，审查通过。",
+      "timestamp": "2026-04-26T12:28:15.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：并行开发 ATU-002/003 节省时间；Developer 提示词包含充分接口细节。改进：测试应在开发后立即运行；技术债务（deprecated API 调用）可在后续处理。",
+      "timestamp": "2026-04-26T12:28:20.000Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Sprint 1 Round 1 — Tester: 19/19 测试全部通过（3 认证 + 4 角色管理 + 6 文档RBAC + 3 多租户 + 3 权限继承）",
+      "timestamp": "2026-04-26T12:29:26.657Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 完全达成。ATU-001 (Done), ATU-002 (Done), ATU-003 (Done)。19/19 测试通过，审查通过。",
+      "timestamp": "2026-04-26T12:29:26.662Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：并行开发 ATU-002/003 节省时间；Developer 提示词包含充分接口细节。改进：测试应在开发后立即运行；技术债务（deprecated API 调用）可在后续处理。",
+      "timestamp": "2026-04-26T12:29:26.665Z"
+    }
+  ],
+  "tokenLog": []
+}

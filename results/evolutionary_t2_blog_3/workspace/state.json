@@ -1,0 +1,100 @@
+{
+  "taskId": "T2-1-blog-system",
+  "method": "evolutionary",
+  "startTime": "2026-04-27T08:00:00Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "IntegrityError优先的重复检测：不先查询数据库检查重复，直接操作并捕获IntegrityError，避免TOCTOU竞争条件",
+      "_resp()响应构建器工厂：统一构建{status, data/message}信封并绑定状态码，路由函数保持极简",
+      "namedtuple序列化层：通过namedtuple保证JSON响应字段顺序确定性，提供单一序列化规范",
+      "统一输入规范化：name = (payload.get('name') or '').strip() 统一处理None/空字符串/空白",
+      "直接关联表操作：标签绑定/解绑通过article_tags.insert()/delete()直接操作，比ORM relationship更明确高效",
+      "预验证所有关联ID：绑定前批量查询Tag.id.in_(tag_ids)，一次性报告所有缺失ID",
+      "Query-level JOIN筛选：按标签筛选使用SQL JOIN推到数据库层，而非Python过滤",
+      "IntegrityError幂等绑定：绑定操作捕获重复插入异常实现幂等性"
+    ],
+    "architecturalNotes": [
+      "routes_tag.py胜出版本使用IntegrityError-first策略，比先查询再插入更安全",
+      "序列化层与路由逻辑分离，便于后续复用",
+      "routes_article.py继承了ATU-001的_resp()工厂和namedtuple序列化，并扩展了直接关联表操作策略"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "标签 CRUD 路由 (routes_tag.py)",
+      "description": "实现标签的创建、列表、编辑、删除路由。包含：POST /tags, GET /tags, PUT /tags/<id>, DELETE /tags/<id>。需处理：name 必填验证、唯一性约束(409)、404 错误、级联删除文章-标签关联。",
+      "status": "done",
+      "dependencies": [],
+      "complexity": "M",
+      "files": ["starter/routes_tag.py"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "6/6", "strategy": "数据类驱动序列化+响应构建器工厂+IntegrityError优先", "winner": true},
+            {"name": "sample2", "score": "6/6", "strategy": "命令调度模式+ValidationError异常类", "winner": false}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "IntegrityError优先的重复检测，避免TOCTOU竞争",
+            "_resp()响应构建器工厂统一格式化",
+            "namedtuple TagData序列化层保证字段顺序",
+            "统一名称规范化 (payload.get('name') or '').strip()"
+          ]
+        }
+      ],
+      "history": ["Gen 1: sample1(6/6) 胜出，进化成功"],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "文章路由 + 标签绑定/筛选 (routes_article.py)",
+      "description": "实现文章 CRUD 和标签绑定/筛选路由。包含：GET /articles (支持 ?tag= 和 ?tag_id= 筛选), POST /articles, GET /articles/<id>, POST /articles/<id>/tags, GET /articles/<id>/tags, DELETE /articles/<id>/tags/<tag_id>。",
+      "status": "done",
+      "dependencies": ["ATU-001"],
+      "complexity": "L",
+      "files": ["starter/routes_article.py"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "18/18", "strategy": "继承_resp()工厂+namedtuple+直接关联表操作+JOIN筛选", "winner": true},
+            {"name": "sample2", "score": "15/18", "strategy": "策略模式ResponseEnvelope+装饰器验证+ORM关系驱动(InstrumentedList错误)", "winner": false}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "直接关联表操作 article_tags.insert()/delete() 比ORM更明确",
+            "预验证所有tag_ids批量查询，一次报告所有缺失",
+            "Query-level JOIN筛选推到数据库层",
+            "IntegrityError幂等绑定防重复"
+          ]
+        }
+      ],
+      "history": ["Gen 1: sample1(18/18) 胜出，进化成功。交叉遗传了ATU-001的_resp()工厂和namedtuple模式"],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {"type": "atu_start", "atu_id": "ATU-001", "description": "TDD 测试先行，测试已存在(6个TestTagCRUD用例)，全部失败(预期行为)", "timestamp": "2026-04-26T23:55:37.305Z"},
+    {"type": "gen_start", "atu_id": "ATU-001", "description": "第 1 代进化开始", "timestamp": "2026-04-26T23:55:37.308Z"},
+    {"type": "gen_variation", "atu_id": "ATU-001", "description": "委派 Developer 生成 sample1 和 sample2 变体", "timestamp": "2026-04-26T23:56:37.743Z"},
+    {"type": "gen_selection", "atu_id": "ATU-001", "description": "sample1: 6/6, sample2: 6/6。选择 sample1", "timestamp": "2026-04-26T23:56:45.248Z"},
+    {"type": "gen_retention", "atu_id": "ATU-001", "description": "提取性状：IntegrityError、_resp()、namedtuple、输入规范化", "timestamp": "2026-04-26T23:56:49.448Z"},
+    {"type": "evolution_complete", "atu_id": "ATU-001", "description": "第 1 代进化成功", "timestamp": "2026-04-26T23:56:49.451Z"},
+    {"type": "atu_end", "atu_id": "ATU-001", "description": "ATU-001 通过第 1 代进化完成", "timestamp": "2026-04-26T23:56:49.452Z"},
+    {"type": "atu_start", "atu_id": "ATU-002", "description": "TDD 测试先行(12个文章+绑定+筛选用例)", "timestamp": "2026-04-26T23:57:03.042Z"},
+    {"type": "gen_start", "atu_id": "ATU-002", "description": "第 1 代进化开始，注入 ATU-001 交叉遗传材料", "timestamp": "2026-04-26T23:57:03.045Z"},
+    {"type": "gen_variation", "atu_id": "ATU-002", "description": "委派 Developer 生成 sample1 和 sample2 变体", "timestamp": "2026-04-26T23:57:49.578Z"},
+    {"type": "gen_selection", "atu_id": "ATU-002", "description": "sample1: 18/18, sample2: 15/18(3失败)。最优: sample1", "timestamp": "2026-04-26T23:57:53.564Z"},
+    {"type": "gen_retention", "atu_id": "ATU-002", "description": "提取性状：关联表直接操作、批量预验证、JOIN筛选、幂等绑定", "timestamp": "2026-04-26T23:57:59.748Z"},
+    {"type": "evolution_complete", "atu_id": "ATU-002", "description": "第 1 代进化成功（18/18全局测试通过）", "timestamp": "2026-04-26T23:57:59.751Z"},
+    {"type": "atu_end", "atu_id": "ATU-002", "description": "ATU-002 通过第 1 代进化完成", "timestamp": "2026-04-26T23:57:59.753Z"}
+  ],
+  "tokenLog": []
+}

@@ -1,0 +1,176 @@
+{
+  "taskId": "T2-2",
+  "method": "scrum",
+  "startTime": "2026-04-26T20:00:00Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 1,
+  "productBacklog": [],
+  "sprintBacklog": [
+    "ATU-001",
+    "ATU-002"
+  ],
+  "sprintGoal": "实现商品和订单的基础 CRUD 功能",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现商品路由 routes_product.py",
+      "description": "实现商品 CRUD 路由：POST /products 创建商品、GET /products 列出所有商品、GET /products/<id> 获取单个商品。返回格式：成功 {status: ok, data: ...}，失败 {status: error, message: ...}",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — Developer 完成实现，修改了 routes_product.py",
+          "timestamp": "2026-04-26T12:00:00Z"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Tester: TestProductCRUD 3/3 通过 | Reviewer: 审查通过",
+          "timestamp": "2026-04-26T12:01:00Z"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现订单 CRUD 路由",
+      "description": "实现订单路由：POST /orders 创建订单（校验库存、计算 total_amount、初始 pending）、GET /orders/<id> 获取订单详情含 items、GET /orders?user_id=X&status=Y 筛选订单",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — Developer 完成实现，修改了 routes_order.py",
+          "timestamp": "2026-04-26T12:00:00Z"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Tester: TestOrderCRUD 4/4 通过 | Reviewer: 审查通过",
+          "timestamp": "2026-04-26T12:01:00Z"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现支付幂等性接口",
+      "description": "实现 POST /orders/<id>/pay 支付接口：需要 Idempotency-Key header（缺失返回 400）、pending→paid 状态转换、扣减商品库存、记录 PaymentRequest、同一 key 重复请求幂等不重复扣库存",
+      "status": "Done",
+      "dependencies": [
+        "ATU-002"
+      ],
+      "complexity": "M",
+      "priority": 3,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — Developer 超额交付，提前实现支付幂等接口",
+          "timestamp": "2026-04-26T12:00:00Z"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Tester: TestIdempotency 3/3 通过 | Reviewer: 审查通过",
+          "timestamp": "2026-04-26T12:01:00Z"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "实现状态机流转（发货/送达/取消）",
+      "description": "实现 POST /orders/<id>/ship（paid→shipped）、POST /orders/<id>/deliver（shipped→delivered）、POST /orders/<id>/cancel（pending/paid→cancelled，paid 时回滚库存）。非法状态跳转返回 409",
+      "status": "Done",
+      "dependencies": [
+        "ATU-002",
+        "ATU-003"
+      ],
+      "complexity": "M",
+      "priority": 4,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — Developer 超额交付，提前实现状态机路由",
+          "timestamp": "2026-04-26T12:00:00Z"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Tester: TestStateMachine 6/6 通过, TestInventory 3/3 通过 | Reviewer: 审查通过",
+          "timestamp": "2026-04-26T12:01:00Z"
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — 选取 ATU-001（商品路由）和 ATU-002（订单 CRUD）进入 Sprint Backlog",
+      "timestamp": "2026-04-26T11:58:31.254Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Daily Standup — Developer: 待开始 ATU-001 商品路由实现 | Tester: 无测试可运行 | Reviewer: 无代码待审查",
+      "timestamp": "2026-04-26T11:59:01.518Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现商品路由 routes_product.py",
+      "timestamp": "2026-04-26T11:59:01.522Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成 — 商品路由实现，TestProductCRUD 3/3 通过",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成 — 订单 CRUD 实现，TestOrderCRUD 4/4 通过",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成 — Developer 超额交付，TestIdempotency 3/3 通过",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 完成 — Developer 超额交付，TestStateMachine 6/6 + TestInventory 3/3 通过",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 达成，全部 4 个 ATU 完成，19/19 测试通过",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：Developer 一次交付全部通过；改进：后续可考虑更细粒度的 Sprint 规划",
+      "timestamp": "2026-04-26T12:02:00Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 达成，全部 4 个 ATU 完成，19/19 测试通过",
+      "timestamp": "2026-04-26T12:01:22.806Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：Developer 一次交付全部通过；改进：后续可考虑更细粒度的 Sprint 规划",
+      "timestamp": "2026-04-26T12:01:22.808Z"
+    }
+  ],
+  "tokenLog": []
+}

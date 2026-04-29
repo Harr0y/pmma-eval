@@ -1,0 +1,120 @@
+{
+  "taskId": "kanban_t2_rbac_3",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00.000Z",
+  "endTime": "2026-04-27T00:05:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现登录接口 routes_auth.py",
+      "description": "在 routes_auth.py 中实现 POST /login 接口：接收 username/password，验证密码，返回含 user_id 和 tenant_id 的 JWT token。错误处理：400（参数缺失）、401（凭据无效）。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/routes_auth.py"],
+      "history": [
+        {"event": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"event": "Developer 完成：实现了 POST /login（JSON解析、字段验证、密码比对、JWT生成）"},
+        {"event": "Tester：TestAuth 3/3 全部通过"},
+        {"event": "Reviewer：审查通过，JWT payload/密码校验/错误码/返回格式均正确"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改 starter/routes_auth.py：实现 POST /login，含参数验证(400)、密码校验(401)、JWT生成(user_id, tenant_id, exp)"
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现文档 CRUD 接口 routes_document.py",
+      "description": "在 routes_document.py 中实现文档接口：GET /documents（doc.read, 本 tenant）、GET /documents/<id>（doc.read + 同 tenant/404）、POST /documents（doc.write）、PUT /documents/<id>（doc.write + owner 或 doc.write.any）、DELETE /documents/<id>（doc.delete）。使用 middleware 的 get_current_user 和 get_user_permissions。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": ["starter/routes_document.py"],
+      "history": [
+        {"event": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"event": "Developer 完成：实现了 5 个文档 CRUD 接口 + RBAC 权限检查 + 租户隔离"},
+        {"event": "Tester：纯文档测试 3/3 通过（5个RBAC测试因ATU-003未实现而失败，有条件通过）"},
+        {"event": "Reviewer：审查通过，权限逻辑/租户隔离/返回格式均正确"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改 starter/routes_document.py：实现 GET /documents(doc.read, 租户隔离)、GET /documents/<id>(doc.read+同tenant)、POST /documents(doc.write, 201)、PUT /documents/<id>(doc.write+owner/write.any)、DELETE /documents/<id>(doc.delete)"
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现角色管理接口 routes_role.py",
+      "description": "在 routes_role.py 中实现角色管理接口：POST /roles（创建角色，role.manage）、GET /roles（列出本 tenant 角色）、PUT /roles/<id>/permissions（替换权限集 + 更新 parent，含继承链循环检测）、POST /users/<id>/roles（分配角色）、DELETE /users/<id>/roles/<role_id>（移除角色，幂等）。同 tenant 校验。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "L",
+      "priority": 3,
+      "files": ["starter/routes_role.py"],
+      "history": [
+        {"event": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"event": "Developer 完成：实现了 5 个角色管理接口，含循环检测和租户校验"},
+        {"event": "Tester：独立验证 19/19 全部通过（从6/19提升）"},
+        {"event": "Reviewer：审查通过，5个端点逻辑正确，循环检测完善"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改 starter/routes_role.py：实现 POST /roles(201,同tenant名唯一+parent校验)、GET /roles(同tenant列表)、PUT /roles/<id>/permissions(替换权限+更新parent+循环检测)、POST /users/<id>/roles(同tenant校验)、DELETE /users/<id>/roles/<role_id>(幂等)"
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:40:46.746Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:40:46.749Z"
+    },
+    {
+      "type": "test_run",
+      "description": "委派 Tester 测试 ATU-001 和 ATU-002",
+      "timestamp": "2026-04-26T17:41:42.729Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:42:37.233Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:42:37.236Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer（最后一个 ATU，关键阻塞项）",
+      "timestamp": "2026-04-26T17:42:57.703Z"
+    },
+    {
+      "type": "test_run",
+      "description": "委派 Tester 独立验证 ATU-003（全量集成测试）",
+      "timestamp": "2026-04-26T17:43:55.095Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试(19/19)和审查，移至 Done。项目全部 ATU 完成",
+      "timestamp": "2026-04-26T17:44:30.793Z"
+    }
+  ],
+  "tokenLog": []
+}

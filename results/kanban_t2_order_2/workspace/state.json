@@ -1,0 +1,135 @@
+{
+  "taskId": "kanban_t2_order_2",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": [
+      "ATU-001",
+      "ATU-002",
+      "ATU-003"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "商品 CRUD 路由实现",
+      "description": "实现 routes_product.py 中的三个接口：POST /products（创建商品，返回201）、GET /products（列出所有商品）、GET /products/<id>（获取单个商品，404处理）。返回格式 {status: ok, data: ...}",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "history": [
+        {"action": "To Do → In Progress", "note": "委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成，待测试"},
+        {"action": "In Review → Done", "note": "测试3/3通过，审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改 routes_product.py（~55行）：实现 POST /products（201创建, 400校验）、GET /products（列表）、GET /products/<id>（详情, 404处理）"
+    },
+    {
+      "id": "ATU-002",
+      "title": "订单 CRUD 路由实现",
+      "description": "实现 routes_order.py 中的订单 CRUD：POST /orders（创建订单，校验库存，计算total_amount，创建OrderItem）、GET /orders/<id>（获取订单详情含items）、GET /orders（按user_id和status筛选）。初始状态pending。返回格式 {status: ok, data: ...}",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {"action": "To Do → In Progress", "note": "委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成，待测试"},
+        {"action": "In Review → Done", "note": "测试4/4通过，审查通过"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改 routes_order.py：实现 POST /orders（创建订单, 库存校验, total_amount计算）、GET /orders/<id>（含items详情）、GET /orders（user_id/status筛选）。ATU-003相关测试预期失败（状态机未实现）。"
+    },
+    {
+      "id": "ATU-003",
+      "title": "订单状态机 + 幂等支付",
+      "description": "实现订单状态转换和幂等支付：POST /orders/<id>/pay（pending→paid，需要Idempotency-Key header，扣减库存，PaymentRequest幂等）、POST /orders/<id>/ship（paid→shipped）、POST /orders/<id>/deliver（shipped→delivered）、POST /orders/<id>/cancel（pending/paid→cancelled，paid时回滚库存）。非法状态跳转返回409。缺少Idempotency-Key返回400。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-002"
+      ],
+      "complexity": "L",
+      "priority": 3,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {"action": "To Do → In Progress", "note": "依赖 ATU-002 已 Done，拉入开发"},
+        {"action": "In Progress → In Review", "note": "Developer 完成，待测试"},
+        {"action": "In Review → In Progress (重试#1)", "note": "测试18/19通过，1失败：PaymentRequest.order relationship缺失"},
+        {"action": "In Progress → In Review (重试#1修复后)", "note": "Developer 修复：existing.order → Order.query.get(existing.order_id)"},
+        {"action": "In Review → Done", "note": "19/19测试全部通过，审查通过"}
+      ],
+      "retryCount": 1,
+      "developerOutput": "在 routes_order.py 追加状态机端点：POST /orders/<id>/pay（幂等检查+库存扣减+PaymentRequest记录）、POST /orders/<id>/ship、POST /orders/<id>/deliver、POST /orders/<id>/cancel（paid回滚库存）。修复幂等检查：existing.order → Order.query.get(existing.order_id)。"
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:19:40.552Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:19:40.555Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：ATU-001 (3/3通过)、ATU-002 (4/4通过)，其余10个失败均属ATU-003范围",
+      "timestamp": "2026-04-26T17:21:07.649Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:21:22.850Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-04-26T17:21:22.853Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:21:40.188Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：18/19通过，1失败（test_duplicate_pay_same_key: PaymentRequest缺少order relationship）",
+      "timestamp": "2026-04-26T17:22:41.447Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：19/19全部通过",
+      "timestamp": "2026-04-26T17:23:37.801Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "19/19测试全部通过，审查通过，移至 Done",
+      "timestamp": "2026-04-26T17:23:54.635Z"
+    }
+  ],
+  "tokenLog": []
+}

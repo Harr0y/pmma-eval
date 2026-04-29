@@ -1,0 +1,144 @@
+{
+  "taskId": "kanban_t2_blog_1",
+  "method": "kanban",
+  "startTime": "2026-04-27T00:00:00.000Z",
+  "endTime": "2026-04-27T00:07:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现 Tag CRUD 路由 (routes_tag.py)",
+      "description": "实现标签的创建、列表、编辑、删除 4 个 REST 接口：POST /tags（创建标签，name必填不可重复），GET /tags（获取所有标签），PUT /tags/<id>（编辑标签名称），DELETE /tags/<id>（删除标签，级联解除文章关联）。返回格式：成功 {status: ok, data: ...}，错误 {status: error, message: ...}",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": [
+        "starter/routes_tag.py"
+      ],
+      "history": [
+        {
+          "action": "pulled_to_in_progress",
+          "note": "从 To Do 拉入 In Progress，委派 Developer"
+        },
+        {
+          "action": "developer_completed",
+          "note": "Developer 完成 routes_tag.py 实现，4个接口全部实现，自测 TestTagCRUD 6/6 通过"
+        },
+        {
+          "action": "moved_to_in_review",
+          "note": "开发完成，移至 In Review，委派 Tester"
+        },
+        {
+          "action": "tester_report",
+          "note": "Tester: TestTagCRUD 6/6 通过，有条件通过"
+        },
+        {
+          "action": "reviewer_approved",
+          "note": "Reviewer: 审查通过，功能正确，级联删除完备"
+        },
+        {
+          "action": "moved_to_done",
+          "note": "ATU-001 通过测试和审查，移至 Done"
+        }
+      ],
+      "retryCount": 0,
+      "cardAttachments": {
+        "developerOutput": "修改文件: starter/routes_tag.py。实现 POST /tags (201/400/409), GET /tags (200), PUT /tags/<id> (200/404/400/409), DELETE /tags/<id> (200/404)。",
+        "testerReport": "TestTagCRUD: 6/6 通过。其他 12 个失败因 Article 路由未实现。有条件通过。",
+        "reviewerFeedback": "审查通过。功能实现正确，级联删除逻辑完备，唯一性检查覆盖自身排除。"
+      }
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现 Article CRUD + 标签绑定 + 按标签筛选路由 (routes_article.py)",
+      "description": "实现文章的 CRUD、标签绑定/解绑、按标签筛选共 6 个 REST 接口：GET /articles（列出所有文章，可选 ?tag=<name> 或 ?tag_id=<id> 筛选），POST /articles（创建文章），GET /articles/<id>（获取单篇），POST /articles/<id>/tags（绑定标签），GET /articles/<id>/tags（获取文章标签），DELETE /articles/<id>/tags/<tag_id>（解除关联）。返回格式同上。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "L",
+      "priority": 2,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        {
+          "action": "pulled_to_in_progress",
+          "note": "从 To Do 拉入 In Progress，依赖 ATU-001 已 Done，委派 Developer"
+        },
+        {
+          "action": "developer_completed",
+          "note": "Developer 完成 routes_article.py 实现，6个接口全部实现，自测 18/18 通过"
+        },
+        {
+          "action": "moved_to_in_review",
+          "note": "开发完成，移至 In Review，委派 Tester"
+        },
+        {
+          "action": "tester_report",
+          "note": "Tester: 18/18 全部通过。结论：通过"
+        },
+        {
+          "action": "reviewer_approved",
+          "note": "Reviewer: 审查通过，6个接口功能正确，模型关联一致"
+        },
+        {
+          "action": "moved_to_done",
+          "note": "ATU-002 通过测试和审查，移至 Done"
+        }
+      ],
+      "retryCount": 0,
+      "cardAttachments": {
+        "developerOutput": "修改文件: starter/routes_article.py。实现 POST /articles (201/400), GET /articles (200，支持 ?tag= 和 ?tag_id= 筛选), GET /articles/<id> (200/404), POST /articles/<id>/tags (200/404), GET /articles/<id>/tags (200/404), DELETE /articles/<id>/tags/<tag_id> (200/404)。",
+        "testerReport": "18/18 全部通过。ATU-002 相关 12 个测试通过，ATU-001 相关 6 个测试也通过。",
+        "reviewerFeedback": "审查通过。6 个接口实现完整，功能逻辑正确，与模型定义一致。"
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-04-26T17:03:37.388Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，ATU-001 (Tag CRUD) TestTagCRUD 6/6 通过，其他 12 个失败因 Article 路由未实现，有条件通过",
+      "timestamp": "2026-04-26T17:04:40.699Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done。TestTagCRUD 6/6 通过，Reviewer 确认功能正确，级联删除完备。",
+      "timestamp": "2026-04-26T17:05:09.012Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，依赖 ATU-001 已 Done，委派 Developer",
+      "timestamp": "2026-04-26T17:05:30.000Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行全量测试，18/18 全部通过。ATU-002 相关 12 个测试全部通过，ATU-001 相关 6 个测试也通过。结论：通过。",
+      "timestamp": "2026-04-26T17:06:43.786Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done。18/18 全部通过，Reviewer 确认 6 个接口功能正确，模型关联一致。",
+      "timestamp": "2026-04-26T17:06:59.047Z"
+    }
+  ],
+  "tokenLog": []
+}
