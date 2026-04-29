@@ -1,0 +1,60 @@
+{
+  "config": {
+    "method": "no-mgmt",
+    "task": "t2_blog",
+    "run": 2,
+    "injectChange": false
+  },
+  "startTime": "2026-04-26T18:07:33.769Z",
+  "endTime": "2026-04-26T18:08:45.571Z",
+  "durationMs": 71802,
+  "testsPassed": true,
+  "testOutput": "Requirement already satisfied: flask>=3.0 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from -r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (3.1.3)\nRequirement already satisfied: flask-sqlalchemy>=3.1 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from -r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 2)) (3.1.1)\nRequirement already satisfied: blinker>=1.9.0 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (1.9.0)\nRequirement already satisfied: click>=8.1.3 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (8.3.3)\nRequirement already satisfied: itsdangerous>=2.2.0 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (2.2.0)\nRequirement already satisfied: jinja2>=3.1.2 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (3.1.6)\nRequirement already satisfied: markupsafe>=2.1.1 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (3.0.3)\nRequirement already satisfied: werkzeug>=3.1.0 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask>=3.0->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 1)) (3.1.8)\nRequirement already satisfied: sqlalchemy>=2.0.16 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from flask-sqlalchemy>=3.1->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 2)) (2.0.49)\nRequirement already satisfied: typing-extensions>=4.6.0 in /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/lib/python3.14/site-packages (from sqlalchemy>=2.0.16->flask-sqlalchemy>=3.1->-r /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/starter/requirements.txt (line 2)) (4.15.0)\n\n[notice] A new release of pip is available: 26.0 -> 26.0.1\n[notice] To update, run: /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/bin/python3 -m pip install --upgrade pip\n============================= test session starts ==============================\nplatform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/bin/python3\ncachedir: .pytest_cache\nrootdir: /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace\nplugins: flask-1.3.0\ncollecting ... collected 18 items\n\nhidden_eval_run/test_integration_eval.py::TestMultiModuleIntegration::test_app_starts_successfully PASSED [  5%]\nhidden_eval_run/test_integration_eval.py::TestMultiModuleIntegration::test_models_importable PASSED [ 11%]\nhidden_eval_run/test_integration_eval.py::TestMultiModuleIntegration::test_blueprint_registration PASSED [ 16%]\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_tag_deletion_cascades_to_articles PASSED [ 22%]\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_tag_filter_uses_correct_model PASSED [ 27%]\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_multiple_articles_same_tag PASSED [ 33%]\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_article_with_multiple_tags_filtered_by_one PASSED [ 38%]\nhidden_eval_run/test_integration_eval.py::TestInterfaceAlignment::test_tag_response_fields_match_model PASSED [ 44%]\nhidden_eval_run/test_integration_eval.py::TestInterfaceAlignment::test_article_response_fields_match_model PASSED [ 50%]\nhidden_eval_run/test_integration_eval.py::TestInterfaceAlignment::test_article_tag_response_uses_tag_model PASSED [ 55%]\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_update_nonexistent_tag PASSED [ 61%]\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_delete_nonexistent_tag PASSED [ 66%]\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_update_tag_to_duplicate_name PASSED [ 72%]\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_create_tag_with_empty_name PASSED [ 77%]\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_bind_nonexistent_tag PASSED [ 83%]\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_bind_to_nonexistent_article PASSED [ 88%]\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_rebind_same_tags_idempotent PASSED [ 94%]\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_delete_tag_cleans_all_bindings PASSED [100%]\n\n=============================== warnings summary ===============================\nhidden_eval_run/test_integration_eval.py: 11 warnings\n  /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/hidden_eval_run/../starter/routes_article.py:111: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)\n    article = Article.query.get(article_id)\n\nhidden_eval_run/test_integration_eval.py: 12 warnings\n  /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/hidden_eval_run/../starter/routes_article.py:119: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)\n    tag = Tag.query.get(tid)\n\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_tag_deletion_cascades_to_articles\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_tag_deletion_cascades_to_articles\nhidden_eval_run/test_integration_eval.py::TestInterfaceAlignment::test_article_tag_response_uses_tag_model\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_rebind_same_tags_idempotent\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_delete_tag_cleans_all_bindings\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_delete_tag_cleans_all_bindings\n  /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/hidden_eval_run/../starter/routes_article.py:134: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)\n    article = Article.query.get(article_id)\n\nhidden_eval_run/test_integration_eval.py::TestCrossModuleConsistency::test_tag_deletion_cascades_to_articles\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_delete_nonexistent_tag\nhidden_eval_run/test_integration_eval.py::TestArticleTagBindingEdgeCases::test_delete_tag_cleans_all_bindings\n  /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/hidden_eval_run/../starter/routes_tag.py:99: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)\n    tag = Tag.query.get(tag_id)\n\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_update_nonexistent_tag\nhidden_eval_run/test_integration_eval.py::TestTagCRUDEdgeCases::test_update_tag_to_duplicate_name\n  /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t2_blog_2/workspace/hidden_eval_run/../starter/routes_tag.py:73: LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)\n    tag = Tag.query.get(tag_id)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================= 18 passed, 34 warnings in 0.33s ========================\n",
+  "metrics": {
+    "totalInputTokens": 75055,
+    "totalOutputTokens": 548,
+    "totalTokens": 75603,
+    "staticInputTokens": 0,
+    "dynamicInputTokens": 75055,
+    "totalCostCny": 0.1150876,
+    "totalCostUsd": 0.23497949999999995,
+    "messageCount": 29,
+    "mainAgentTokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0
+    },
+    "subAgentTokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0
+    },
+    "byAgent": {
+      "main": {
+        "input": 0,
+        "output": 0,
+        "total": 0,
+        "messageCount": 29
+      }
+    },
+    "modelUsage": {
+      "glm-5-turbo": {
+        "inputTokens": 21768,
+        "outputTokens": 4850,
+        "cacheReadInputTokens": 323085,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.23497949999999995
+      }
+    }
+  },
+  "stateJson": {
+    "taskId": "t2_blog_2",
+    "method": "no-mgmt",
+    "startTime": "2026-04-27T02:07:00.000Z",
+    "changeInjected": false,
+    "status": "Done",
+    "events": []
+  },
+  "messageCount": 56,
+  "messagesFile": "messages.jsonl"
+}
