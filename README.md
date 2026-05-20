@@ -219,22 +219,6 @@ pmma-eval/
 
 ---
 
-## 📄 引用
-
-如果你在研究中使用了 PMMA-Eval，请引用：
-
-```bibtex
-@mastersthesis{huang2026pmma,
-  author  = {黄海晨},
-  title   = {面向数字劳动力的项目管理方法适配性分析与实证研究},
-  school  = {复旦大学},
-  year    = {2026},
-  note    = {工程管理硕士（MEM）学位论文}
-}
-```
-
----
-
 ## 📜 License
 
 MIT License — 实验框架和结果数据可自由使用、修改和分发。
