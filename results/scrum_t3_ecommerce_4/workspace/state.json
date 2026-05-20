@@ -1,0 +1,300 @@
+{
+  "taskId": "scrum_t3_ecommerce_4",
+  "method": "scrum",
+  "startTime": "2026-05-01T08:40:00.000Z",
+  "changeInjected": true,
+  "sprintNumber": 1,
+  "sprintRound": 5,
+  "productBacklog": [],
+  "sprintBacklog": [
+    "ATU-001",
+    "ATU-002",
+    "ATU-003",
+    "ATU-004",
+    "ATU-005"
+  ],
+  "sprintGoal": "完成电商订单系统全部核心功能（模型、产品路由、订单路由、限流、原子库存）",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "完善 Order 模型 - 新增 origin 字段",
+      "description": "在 models.py 的 Order 模型中新增 origin 字段（字符串，默认 'web'），用于支持订单渠道追溯。同时确保 models.py 中所有模型定义完整。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/models.py"
+      ],
+      "history": [
+        {
+          "round": 1,
+          "action": "Developer 新增 origin 字段到 Order 模型"
+        },
+        {
+          "round": 1,
+          "action": "Tester: 模型变更正确，origin 相关测试待路由实现后验证"
+        },
+        {
+          "round": 1,
+          "action": "Reviewer: 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现产品管理路由 (routes_product.py)",
+      "description": "实现 routes_product.py 中的 GET /products（列出所有产品）和 POST /products（创建产品，Admin only）。包括 RBAC 权限控制：非 admin 返回 403，无 X-User-Id 返回 401。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "M",
+      "priority": 2,
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "history": [
+        {
+          "round": 2,
+          "action": "Developer 实现 GET/POST /products 路由含 RBAC"
+        },
+        {
+          "round": 2,
+          "action": "Tester: 6/6 ATU 相关测试通过，全局 7/19 通过"
+        },
+        {
+          "round": 2,
+          "action": "Reviewer: 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现订单管理路由 (routes_order.py)",
+      "description": "实现 routes_order.py 中的 POST /orders（创建订单，扣减库存，计算 total_price，支持 origin 参数）和 GET /orders（Admin 看所有订单，普通用户只看自己的）。需处理库存不足、产品不存在等错误。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "L",
+      "priority": 3,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "round": 3,
+          "action": "Developer 实现完整订单路由，POST/GET 含 origin 支持"
+        },
+        {
+          "round": 3,
+          "action": "Tester: 9/9 ATU 相关测试通过，全局 18/19 通过（94.7%）"
+        },
+        {
+          "round": 3,
+          "action": "Reviewer: 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "实现下单限流中间件",
+      "description": "在 middleware.py 中新增限流功能：同一用户（基于 user_id）在 10 秒内只能成功提交 1 笔订单。超过频率返回 HTTP 429。routes_order.py 的创建订单路由需调用此限流中间件。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-003"
+      ],
+      "complexity": "M",
+      "priority": 4,
+      "files": [
+        "starter/middleware.py",
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "round": 4,
+          "action": "Developer 在 middleware.py 新增限流功能，routes_order.py 集成调用"
+        },
+        {
+          "round": 4,
+          "action": "Tester: 19/19 全部测试通过"
+        },
+        {
+          "round": 4,
+          "action": "Reviewer: 审查通过"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-005",
+      "title": "确保库存扣减原子性",
+      "description": "确保并发下单时库存扣减是绝对安全的（不能出现负数库存）。使用数据库级别的原子操作（如 UPDATE ... SET stock = stock - quantity WHERE stock >= quantity）来防止超卖。",
+      "status": "Done",
+      "dependencies": [
+        "ATU-003"
+      ],
+      "complexity": "M",
+      "priority": 5,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "round": 5,
+          "action": "Developer 将库存扣减改为原子 UPDATE SQL 操作"
+        },
+        {
+          "round": 5,
+          "action": "Tester: 19/19 全部测试通过"
+        },
+        {
+          "round": 5,
+          "action": "Reviewer: 审查通过"
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — 选取 ATU-001~ATU-005 全部进入 Sprint Backlog，Sprint Goal：完成电商订单系统全部核心功能（模型、产品路由、订单路由、限流、原子库存）",
+      "timestamp": "2026-05-01T00:39:45.814Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Daily Standup — Developer: 就绪，准备实现模型变更；Tester: 等待代码完成；Reviewer: 等待代码完成",
+      "timestamp": "2026-05-01T00:40:09.450Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现 Order 模型 origin 字段",
+      "timestamp": "2026-05-01T00:40:09.451Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成 — Order 模型新增 origin 字段，审查通过",
+      "timestamp": "2026-05-01T00:41:15.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成 — Order 模型新增 origin 字段，审查通过",
+      "timestamp": "2026-05-01T00:42:59.445Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 2 Daily Standup — Developer: ATU-001 完成，开始实现产品路由；Tester: 18/19 测试失败（路由未实现）；Reviewer: ATU-001 审查通过，建议路由实现时确保接口一致",
+      "timestamp": "2026-05-01T00:42:59.447Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "Sprint 1 Round 2 — 开始实现产品管理路由",
+      "timestamp": "2026-05-01T00:42:59.447Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成 — 产品管理路由实现，6/6 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:44:30.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成 — 产品管理路由实现，6/6 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:45:12.180Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 3 Daily Standup — Developer: ATU-001/002 完成，开始实现订单路由（最复杂模块）；Tester: 7/19 测试通过，12 个失败均因订单路由未实现；Reviewer: ATU-002 审查通过",
+      "timestamp": "2026-05-01T00:45:12.180Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "Sprint 1 Round 3 — 开始实现订单管理路由（含 origin、库存扣减、RBAC）",
+      "timestamp": "2026-05-01T00:45:12.181Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成 — 订单管理路由实现，18/19 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:47:00.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成 — 订单管理路由实现，18/19 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:48:12.730Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 4 Daily Standup — Developer: ATU-001/002/003 完成，18/19 测试通过，仅剩限流测试失败；Tester: 确认唯一失败是 test_rapid_order_blocked（429 限流）；Reviewer: ATU-003 审查通过，库存并发安全为非阻塞建议",
+      "timestamp": "2026-05-01T00:48:12.731Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "Sprint 1 Round 4 — 开始实现下单限流中间件",
+      "timestamp": "2026-05-01T00:48:12.732Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 完成 — 限流中间件实现，19/19 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:50:00.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 完成 — 限流中间件实现，19/19 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:52:57.479Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 5 Daily Standup — Developer: ATU-001~004 全部完成，19/19 测试通过；Tester: 全绿；Reviewer: ATU-004 审查通过，建议后续迁移 Query.get() → db.session.get()",
+      "timestamp": "2026-05-01T00:52:57.481Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-005",
+      "description": "Sprint 1 Round 5 — 开始确保库存扣减原子性",
+      "timestamp": "2026-05-01T00:52:57.482Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-005",
+      "description": "ATU-005 完成 — 库存扣减改为原子 SQL 操作，19/19 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:54:30.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 100% 达成，5/5 ATU 完成，19/19 测试通过",
+      "timestamp": "2026-05-01T00:54:30.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：ATU 依赖规划合理，每轮一个 ATU 无阻塞；改进：Query.get() 迁移，quantity 输入校验",
+      "timestamp": "2026-05-01T00:54:30.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 100% 达成，5/5 ATU 完成，19/19 测试通过",
+      "timestamp": "2026-05-01T00:57:16.199Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：ATU 依赖规划合理，每轮一个 ATU 无阻塞；改进：Query.get() 迁移，quantity 输入校验",
+      "timestamp": "2026-05-01T00:57:16.201Z"
+    }
+  ],
+  "tokenLog": []
+}

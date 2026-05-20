@@ -2,251 +2,251 @@
   {
     "method": "evolutionary",
     "task": "t1_todo_cli",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 148.0,
-    "avg_tokens": 1065925,
-    "avg_cost_cny": 1.5904
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 190,
+    "avg_tokens": 963022,
+    "avg_cost_cny": 1.5026
   },
   {
     "method": "evolutionary",
     "task": "t2_blog",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 515.4,
-    "avg_tokens": 1865755,
-    "avg_cost_cny": 2.8554
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 413,
+    "avg_tokens": 1905650,
+    "avg_cost_cny": 2.9197
   },
   {
     "method": "evolutionary",
     "task": "t2_order",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 347.5,
-    "avg_tokens": 1296503,
-    "avg_cost_cny": 2.0333
+    "pass_rate": "0/5",
+    "avg_duration_s": 362,
+    "avg_tokens": 1333579,
+    "avg_cost_cny": 2.1058
   },
   {
     "method": "evolutionary",
     "task": "t2_rbac",
-    "runs": 3,
-    "passed": 2,
-    "pass_rate": "2/3",
-    "avg_duration_s": 523.4,
-    "avg_tokens": 1882184,
-    "avg_cost_cny": 2.8547
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 495,
+    "avg_tokens": 2137261,
+    "avg_cost_cny": 3.2322
   },
   {
     "method": "evolutionary",
     "task": "t3_ecommerce",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 629.3,
-    "avg_tokens": 2598871,
-    "avg_cost_cny": 3.8822
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 727,
+    "avg_tokens": 2721144,
+    "avg_cost_cny": 4.0539
   },
   {
     "method": "scrum",
     "task": "t1_todo_cli",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 303.8,
-    "avg_tokens": 684846,
-    "avg_cost_cny": 1.1033
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 248,
+    "avg_tokens": 759989,
+    "avg_cost_cny": 1.2097
   },
   {
     "method": "scrum",
     "task": "t2_blog",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 429.6,
-    "avg_tokens": 1250326,
-    "avg_cost_cny": 1.9752
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 410,
+    "avg_tokens": 1339399,
+    "avg_cost_cny": 2.0707
   },
   {
     "method": "scrum",
     "task": "t2_order",
-    "runs": 3,
+    "runs": 5,
     "passed": 1,
-    "pass_rate": "1/3",
-    "avg_duration_s": 336.7,
-    "avg_tokens": 1394248,
-    "avg_cost_cny": 2.1028
+    "pass_rate": "1/5",
+    "avg_duration_s": 423,
+    "avg_tokens": 1456754,
+    "avg_cost_cny": 2.261
   },
   {
     "method": "scrum",
     "task": "t2_rbac",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 463.9,
-    "avg_tokens": 1228093,
-    "avg_cost_cny": 1.9519
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 560,
+    "avg_tokens": 1252087,
+    "avg_cost_cny": 2.0003
   },
   {
     "method": "scrum",
     "task": "t3_ecommerce",
-    "runs": 3,
+    "runs": 5,
     "passed": 2,
-    "pass_rate": "2/3",
-    "avg_duration_s": 532.5,
-    "avg_tokens": 1642954,
-    "avg_cost_cny": 2.6493
+    "pass_rate": "2/5",
+    "avg_duration_s": 860,
+    "avg_tokens": 2542967,
+    "avg_cost_cny": 3.7796
   },
   {
     "method": "waterfall",
     "task": "t1_todo_cli",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 532.3,
-    "avg_tokens": 1796821,
-    "avg_cost_cny": 2.6561
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 761,
+    "avg_tokens": 1924088,
+    "avg_cost_cny": 2.8781
   },
   {
     "method": "waterfall",
     "task": "t2_blog",
-    "runs": 3,
-    "passed": 2,
-    "pass_rate": "2/3",
-    "avg_duration_s": 1294.4,
-    "avg_tokens": 4281847,
-    "avg_cost_cny": 6.1232
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 1423,
+    "avg_tokens": 4386624,
+    "avg_cost_cny": 6.2589
   },
   {
     "method": "waterfall",
     "task": "t2_order",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 1250.6,
-    "avg_tokens": 4396601,
-    "avg_cost_cny": 6.1685
+    "pass_rate": "0/5",
+    "avg_duration_s": 1477,
+    "avg_tokens": 4699704,
+    "avg_cost_cny": 6.6126
   },
   {
     "method": "waterfall",
     "task": "t2_rbac",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 1069.4,
-    "avg_tokens": 3622863,
-    "avg_cost_cny": 5.246
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 1200,
+    "avg_tokens": 4153080,
+    "avg_cost_cny": 5.9436
   },
   {
     "method": "waterfall",
     "task": "t3_ecommerce",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 666.7,
-    "avg_tokens": 3246444,
-    "avg_cost_cny": 4.812
+    "pass_rate": "0/5",
+    "avg_duration_s": 887,
+    "avg_tokens": 4156423,
+    "avg_cost_cny": 5.985
   },
   {
     "method": "kanban",
     "task": "t1_todo_cli",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 97.4,
-    "avg_tokens": 515354,
-    "avg_cost_cny": 0.7879
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 109,
+    "avg_tokens": 581614,
+    "avg_cost_cny": 0.8632
   },
   {
     "method": "kanban",
     "task": "t2_blog",
-    "runs": 3,
-    "passed": 2,
-    "pass_rate": "2/3",
-    "avg_duration_s": 250.8,
-    "avg_tokens": 875529,
-    "avg_cost_cny": 1.46
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 271,
+    "avg_tokens": 893721,
+    "avg_cost_cny": 1.4808
   },
   {
     "method": "kanban",
     "task": "t2_order",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 269.0,
-    "avg_tokens": 1307569,
-    "avg_cost_cny": 2.0298
+    "pass_rate": "0/5",
+    "avg_duration_s": 304,
+    "avg_tokens": 1250259,
+    "avg_cost_cny": 1.9854
   },
   {
     "method": "kanban",
     "task": "t2_rbac",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 315.1,
-    "avg_tokens": 1229933,
-    "avg_cost_cny": 1.9667
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 339,
+    "avg_tokens": 1148885,
+    "avg_cost_cny": 1.8614
   },
   {
     "method": "kanban",
     "task": "t3_ecommerce",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 395.3,
-    "avg_tokens": 1017214,
-    "avg_cost_cny": 1.7333
+    "pass_rate": "0/5",
+    "avg_duration_s": 434,
+    "avg_tokens": 1379115,
+    "avg_cost_cny": 2.2439
   },
   {
     "method": "no-mgmt",
     "task": "t1_todo_cli",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 26.6,
-    "avg_tokens": 131233,
-    "avg_cost_cny": 0.1848
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 27,
+    "avg_tokens": 97579,
+    "avg_cost_cny": 0.1407
   },
   {
     "method": "no-mgmt",
     "task": "t2_blog",
-    "runs": 3,
-    "passed": 3,
-    "pass_rate": "3/3",
-    "avg_duration_s": 66.8,
-    "avg_tokens": 92018,
-    "avg_cost_cny": 0.1337
+    "runs": 5,
+    "passed": 5,
+    "pass_rate": "5/5",
+    "avg_duration_s": 69,
+    "avg_tokens": 92519,
+    "avg_cost_cny": 0.1362
   },
   {
     "method": "no-mgmt",
     "task": "t2_order",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 53.1,
-    "avg_tokens": 101184,
-    "avg_cost_cny": 0.148
+    "pass_rate": "0/5",
+    "avg_duration_s": 62,
+    "avg_tokens": 85783,
+    "avg_cost_cny": 0.1286
   },
   {
     "method": "no-mgmt",
     "task": "t2_rbac",
-    "runs": 3,
-    "passed": 2,
-    "pass_rate": "2/3",
-    "avg_duration_s": 60.1,
-    "avg_tokens": 75204,
-    "avg_cost_cny": 0.1121
+    "runs": 5,
+    "passed": 4,
+    "pass_rate": "4/5",
+    "avg_duration_s": 77,
+    "avg_tokens": 117808,
+    "avg_cost_cny": 0.1836
   },
   {
     "method": "no-mgmt",
     "task": "t3_ecommerce",
-    "runs": 3,
+    "runs": 5,
     "passed": 0,
-    "pass_rate": "0/3",
-    "avg_duration_s": 120.8,
-    "avg_tokens": 204526,
-    "avg_cost_cny": 0.3023
+    "pass_rate": "0/5",
+    "avg_duration_s": 131,
+    "avg_tokens": 177314,
+    "avg_cost_cny": 0.2679
   }
 ]

@@ -1,0 +1,76 @@
+{
+  "config": {
+    "method": "no-mgmt",
+    "task": "t1_todo_cli",
+    "run": 4,
+    "injectChange": false
+  },
+  "startTime": "2026-05-01T03:29:00.266Z",
+  "endTime": "2026-05-01T03:29:28.041Z",
+  "durationMs": 27775,
+  "testsPassed": true,
+  "testOutput": "============================= test session starts ==============================\nplatform darwin -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0 -- /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/.venv/bin/python3\ncachedir: .pytest_cache\nrootdir: /Users/harry/Workspaces/disclaude/workspace/mem-agent-pm/experiment/results/no-mgmt_t1_todo_cli_4/workspace\nplugins: flask-1.3.0\ncollecting ... collected 1 item\n\nhidden_eval_run/test_todo_eval.py::test_todo_edge_cases PASSED           [100%]\n\n============================== 1 passed in 0.10s ===============================\n",
+  "metrics": {
+    "totalInputTokens": 46983,
+    "totalOutputTokens": 309,
+    "totalTokens": 47292,
+    "staticInputTokens": 0,
+    "dynamicInputTokens": 46983,
+    "totalCostCny": 0.0855596,
+    "totalCostUsd": 0.11771360000000003,
+    "messageCount": 13,
+    "mainAgentTokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0
+    },
+    "subAgentTokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0
+    },
+    "byAgent": {
+      "main": {
+        "input": 0,
+        "output": 0,
+        "total": 0,
+        "messageCount": 13
+      }
+    },
+    "modelUsage": {
+      "claude-haiku-4-5-20251001": {
+        "inputTokens": 39,
+        "outputTokens": 72,
+        "cacheReadInputTokens": 299,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.00042890000000000007
+      },
+      "glm-5-turbo": {
+        "inputTokens": 15522,
+        "outputTokens": 1527,
+        "cacheReadInputTokens": 159379,
+        "cacheCreationInputTokens": 0,
+        "costUSD": 0.11728470000000002
+      }
+    }
+  },
+  "stateJson": {
+    "taskId": "no-mgmt_t1_todo_cli_4",
+    "method": "no-mgmt",
+    "startTime": "2026-05-01T11:30:00.000Z",
+    "changeInjected": false,
+    "status": "Done",
+    "events": [
+      {
+        "type": "task_start",
+        "description": "开始实现命令行待办工具 todo.py"
+      },
+      {
+        "type": "task_end",
+        "description": "实现 add/list/remove 命令，4 项测试全部通过"
+      }
+    ]
+  },
+  "messageCount": 26,
+  "messagesFile": "messages.jsonl"
+}

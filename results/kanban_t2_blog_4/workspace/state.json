@@ -1,0 +1,135 @@
+{
+  "taskId": "kanban_t2_blog_4",
+  "method": "kanban",
+  "startTime": "2026-05-01T00:00:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": [
+      "ATU-001",
+      "ATU-002"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Tag CRUD 路由实现 (routes_tag.py)",
+      "description": "实现标签 CRUD 路由：POST /tags（创建标签，name 必填不可重复）, GET /tags（获取所有标签）, PUT /tags/<id>（编辑标签名称）, DELETE /tags/<id>（删除标签，级联解除文章关联）。使用 tag_bp = Blueprint('tag_bp', __name__)。返回格式：成功 {status: ok, data: ...}，错误 {status: error, message: ...}。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": [
+        "starter/routes_tag.py"
+      ],
+      "history": [
+        {
+          "action": "拉入 In Progress",
+          "reason": "无依赖，从 To Do 拉入"
+        },
+        {
+          "action": "开发完成，移至 In Review",
+          "reason": "Developer 完成 routes_tag.py 的 4 个 CRUD 路由实现"
+        },
+        {
+          "action": "Tester 测试通过",
+          "reason": "TestTagCRUD 6/6 通过"
+        },
+        {
+          "action": "审查通过，移至 Done",
+          "reason": "Reviewer 确认无功能性问题，代码正确"
+        }
+      ],
+      "retryCount": 0,
+      "cardAttachments": {
+        "developerOutput": "修改文件: starter/routes_tag.py。实现了 POST/GET/PUT/DELETE /tags 四个路由。POST 创建标签验证 name 非空，IntegrityError 捕获重复(409)。GET 列出所有标签。PUT 更新标签名称，处理 404/400/409。DELETE 删除标签，SQLAlchemy 自动清理关联。",
+        "testerReport": "ATU-001 相关测试 TestTagCRUD 6/6 全部通过。无失败。",
+        "reviewerReport": "审查通过。POST/GET/PUT/DELETE 四个路由逻辑正确，错误处理完整，Blueprint 注册正确。"
+      }
+    },
+    {
+      "id": "ATU-002",
+      "title": "Article CRUD + 标签绑定/筛选路由实现 (routes_article.py)",
+      "description": "实现文章路由：GET /articles（列出所有文章，可选 ?tag=<name> 或 ?tag_id=<id> 筛选）, POST /articles（创建文章）, GET /articles/<id>（获取单篇）, POST /articles/<id>/tags（绑定标签 {tag_ids: [1,2]}）, GET /articles/<id>/tags（获取文章标签）, DELETE /articles/<id>/tags/<tag_id>（解除关联）。使用 article_bp = Blueprint('article_bp', __name__)。返回格式同上。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "L",
+      "priority": 2,
+      "files": [
+        "starter/routes_article.py"
+      ],
+      "history": [
+        {
+          "action": "拉入 In Progress",
+          "reason": "无依赖，从 To Do 拉入"
+        },
+        {
+          "action": "开发完成，移至 In Review",
+          "reason": "Developer 完成 routes_article.py 的 6 个路由实现"
+        },
+        {
+          "action": "Tester 测试通过",
+          "reason": "TestArticleCRUD 4/4 + TestArticleTagBinding 4/4 + TestFilterArticlesByTag 4/4 全部通过"
+        },
+        {
+          "action": "审查通过，移至 Done",
+          "reason": "Reviewer 确认无功能性问题，代码正确"
+        }
+      ],
+      "retryCount": 0,
+      "cardAttachments": {
+        "developerOutput": "修改文件: starter/routes_article.py。实现了 GET/POST /articles、GET /articles/<id>、POST/GET /articles/<id>/tags、DELETE /articles/<id>/tags/<tag_id> 共 6 个路由。支持 ?tag= 和 ?tag_id= 筛选参数，标签不存在时返回空列表。",
+        "testerReport": "ATU-002 相关测试 TestArticleCRUD 4/4 + TestArticleTagBinding 4/4 + TestFilterArticlesByTag 4/4 全部通过。无失败。",
+        "reviewerReport": "审查通过。6 个路由逻辑正确，标签筛选支持按 name 和 id，错误处理完整，Blueprint 注册正确。"
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:06:12.168Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:06:12.169Z"
+    },
+    {
+      "type": "test_run",
+      "description": "委派 Tester 运行全部测试",
+      "timestamp": "2026-05-01T03:07:41.887Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:08:00.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:08:00.000Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:09:09.193Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:09:09.195Z"
+    }
+  ],
+  "tokenLog": []
+}

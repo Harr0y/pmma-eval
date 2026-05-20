@@ -1,0 +1,170 @@
+{
+  "taskId": "T2-1-blog-tag-management",
+  "method": "evolutionary",
+  "startTime": "2026-05-01T00:00:00Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "IntegrityError捕获做重复检测：利用数据库UNIQUE约束而非预查询，避免竞态条件",
+      "集中式验证辅助函数：create/update共享验证逻辑，返回(name, error_response)元组",
+      "model_to_dict序列化函数：统一模型到dict的转换，保证响应格式一致",
+      "try/except + db.session.rollback()：所有变更操作包裹异常处理，确保事务安全",
+      "@catch_db_errors装饰器统一处理数据库异常（IntegrityError→409，通用→500）",
+      "_find_entity()查找辅助函数返回(entity, error_response)元组，复用404处理",
+      "_build_filtered_query()查询工厂封装筛选逻辑，DRY原则",
+      "详细字段验证：报告具体缺失字段名而非笼统错误消息",
+      "Bulk insert + 预验证：先检查关联ID存在性再批量插入"
+    ],
+    "architecturalNotes": []
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Tag CRUD routes (routes_tag.py)",
+      "description": "实现标签 CRUD 路由：POST /tags（创建）、GET /tags（列表）、PUT /tags/<id>（编辑）、DELETE /tags/<id>（删除，级联解除关联）",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": ["starter/routes_tag.py"],
+      "testClasses": ["TestTagCRUD"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "6/6", "strategy": "装饰器管道模式+预查询去重"},
+            {"name": "sample2", "score": "6/6", "strategy": "验证辅助函数+IntegrityError去重+try/except rollback"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "IntegrityError捕获做重复检测，利用数据库UNIQUE约束避免竞态条件",
+            "集中式validate_name()辅助函数，create/update共享验证逻辑",
+            "tag_to_dict()序列化函数统一响应格式",
+            "try/except + db.session.rollback()确保事务安全"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Article routes (routes_article.py)",
+      "description": "实现文章路由：CRUD + 标签绑定/解绑 + 按标签筛选。GET/POST /articles, GET /articles/<id>, POST/GET/DELETE /articles/<id>/tags, 按标签名/ID筛选",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "M",
+      "files": ["starter/routes_article.py"],
+      "testClasses": ["TestArticleCRUD", "TestArticleTagBinding", "TestFilterArticlesByTag"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "18/18", "strategy": "装饰器异常处理+查找辅助函数+查询工厂+预验证"},
+            {"name": "sample2", "score": "18/18", "strategy": "Response builder+Context manager+内联验证"}
+          ],
+          "winner": "sample1",
+          "retainedTraits": [
+            "@catch_db_errors装饰器统一处理数据库异常和事务回滚",
+            "_find_article()查找辅助函数返回(entity, error_response)元组",
+            "_build_filtered_query()查询工厂封装筛选逻辑（DRY）",
+            "_validate_article_payload()详细字段验证，报告具体缺失字段",
+            "Bulk insert + 预验证tag IDs存在性"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "TDD 测试先行 — test_basic.py 中 TestTagCRUD 已存在（6个测试），作为适应度函数",
+      "timestamp": "2026-04-30T23:39:24.552Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始（初始变异，无遗传材料）",
+      "timestamp": "2026-04-30T23:39:31.033Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 Developer 生成 sample1（装饰器模式）和 sample2（验证辅助函数+IntegrityError）两个变体",
+      "timestamp": "2026-04-30T23:40:23.881Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 6/6 通过, sample2: 6/6 通过。最优样本: sample2（IntegrityError去重更健壮）",
+      "timestamp": "2026-04-30T23:40:34.569Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：IntegrityError去重、集中验证辅助函数、tag_to_dict序列化器、try/except+rollback事务安全",
+      "timestamp": "2026-04-30T23:40:37.448Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功，ATU-001 完成（6/6 测试通过）",
+      "timestamp": "2026-04-30T23:40:37.449Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过第 1 代进化完成",
+      "timestamp": "2026-04-30T23:40:37.450Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行 — test_basic.py 中 TestArticleCRUD+TestArticleTagBinding+TestFilterArticlesByTag 已存在（12个测试），作为适应度函数",
+      "timestamp": "2026-04-30T23:40:55.536Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始，注入 ATU-001 交叉遗传材料",
+      "timestamp": "2026-04-30T23:40:55.537Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 Developer 生成 sample1 和 sample2 变体（含交叉遗传材料）",
+      "timestamp": "2026-04-30T23:40:55.538Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 18/18 通过(14 warnings), sample2: 18/18 通过(22 warnings)。最优样本: sample1",
+      "timestamp": "2026-04-30T23:42:07.417Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：@catch_db_errors装饰器、_find_article查找辅助函数、_build_filtered_query查询工厂、详细字段验证、bulk insert+预验证",
+      "timestamp": "2026-04-30T23:42:10.827Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成（18/18 测试通过）",
+      "timestamp": "2026-04-30T23:42:10.829Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-30T23:42:10.830Z"
+    }
+  ],
+  "tokenLog": []
+}

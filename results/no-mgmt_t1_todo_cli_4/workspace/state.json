@@ -1,0 +1,11 @@
+{
+  "taskId": "no-mgmt_t1_todo_cli_4",
+  "method": "no-mgmt",
+  "startTime": "2026-05-01T11:30:00.000Z",
+  "changeInjected": false,
+  "status": "Done",
+  "events": [
+    {"type": "task_start", "description": "开始实现命令行待办工具 todo.py"},
+    {"type": "task_end", "description": "实现 add/list/remove 命令，4 项测试全部通过"}
+  ]
+}

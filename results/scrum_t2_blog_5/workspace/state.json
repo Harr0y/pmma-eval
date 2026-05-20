@@ -1,0 +1,161 @@
+{
+  "taskId": "scrum_t2_blog_5",
+  "method": "scrum",
+  "startTime": "2026-05-01T08:15:00.000Z",
+  "endTime": "2026-05-01T08:25:00.000Z",
+  "changeInjected": false,
+  "sprintNumber": 1,
+  "sprintRound": 5,
+  "productBacklog": [],
+  "sprintBacklog": [],
+  "sprintGoal": "完成博客系统所有 API 接口实现并通过全部测试",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Implement Tag CRUD routes",
+      "description": "Implement all tag CRUD endpoints in routes_tag.py: POST /tags (create, 400/409 errors), GET /tags (list all), PUT /tags/<id> (update name, 400/404/409 errors), DELETE /tags/<id> (delete + cascade remove bindings). Blueprint: tag_bp. Response format: {status, data/message}.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": ["starter/routes_tag.py"],
+      "history": [
+        {"action": "Sprint 1 Round 1: Developer 实现完成，Tester 6/6 通过，Reviewer 审查通过", "timestamp": "2026-05-01T00:16:57.989Z"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Implement Article CRUD routes",
+      "description": "Implement article CRUD endpoints in routes_article.py: POST /articles (create, 400 if missing fields), GET /articles (list all), GET /articles/<id> (get single, 404). Blueprint: article_bp. Response format: {status, data}.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "Sprint 1 Round 2: Developer 实现完成，Tester 4/4 通过，Reviewer 审查通过", "timestamp": "2026-05-01T00:18:42.567Z"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "Implement Article-Tag binding routes",
+      "description": "Implement article-tag binding endpoints in routes_article.py: POST /articles/<id>/tags (bind tags by tag_ids), GET /articles/<id>/tags (list article's tags), DELETE /articles/<id>/tags/<tag_id> (unbind). Handle 404 for article not found.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 3,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "Sprint 1 Round 3: Developer 实现完成，Tester 4/4 通过，Reviewer 审查通过", "timestamp": "2026-05-01T00:20:02.933Z"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "Implement tag-based article filtering",
+      "description": "Add query parameter filtering to GET /articles: ?tag=<name> filters by tag name, ?tag_id=<id> filters by tag ID. Return empty list when no match. Works alongside existing GET /articles without filter.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 4,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "Sprint 1 Round 4: Developer 实现完成，Tester 4/4 通过，Reviewer 审查通过", "timestamp": "2026-05-01T00:21:13.654Z"}
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — 选取 ATU-001, ATU-002, ATU-003, ATU-004 全部进入 Sprint Backlog，Sprint Goal: 完成博客系统所有 API 接口实现并通过全部测试",
+      "timestamp": "2026-05-01T00:15:26.870Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Daily Standup — 初始状态，所有 ATU 均为 Open，开始执行 ATU-001 Tag CRUD routes",
+      "timestamp": "2026-05-01T00:15:36.925Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现 Tag CRUD routes",
+      "timestamp": "2026-05-01T00:15:40.595Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 Tag CRUD routes 实现完成，6/6 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:16:57.989Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 2 Daily Standup — ATU-001 已完成(Done)，开始执行 ATU-002 Article CRUD routes",
+      "timestamp": "2026-05-01T00:17:19.953Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "Sprint 1 Round 2 — 开始实现 Article CRUD routes",
+      "timestamp": "2026-05-01T00:17:19.955Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 Article CRUD routes 实现完成，4/4 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:18:42.567Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 3 Daily Standup — ATU-001 Done, ATU-002 Done，开始执行 ATU-003 Article-Tag binding routes",
+      "timestamp": "2026-05-01T00:18:50.402Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "Sprint 1 Round 3 — 开始实现 Article-Tag binding routes",
+      "timestamp": "2026-05-01T00:18:50.404Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 Article-Tag binding routes 实现完成，4/4 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:20:02.933Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 4 Daily Standup — ATU-001/002/003 均已 Done，开始执行最后一个 ATU-004 标签筛选",
+      "timestamp": "2026-05-01T00:20:10.972Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "Sprint 1 Round 4 — 开始实现 tag-based article filtering",
+      "timestamp": "2026-05-01T00:20:10.974Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 tag-based article filtering 实现完成，全部 18/18 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:21:13.654Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 5 Daily Standup — 所有 4 个 ATU 均已完成(Done)，18/18 测试全部通过，进入 Sprint Review + Retrospective",
+      "timestamp": "2026-05-01T00:21:24.430Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — Sprint Goal 达成: 完成博客系统所有 API 接口实现并通过全部测试。4/4 ATU 完成，18/18 测试通过",
+      "timestamp": "2026-05-01T00:21:24.432Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好: 4个ATU全部在一个Sprint内完成、测试全部通过；改进: routes_tag.py中Tag.query.get()应迁移到db.session.get()、信息中继机制有效保证了质量",
+      "timestamp": "2026-05-01T00:21:24.433Z"
+    }
+  ],
+  "tokenLog": []
+}

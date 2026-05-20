@@ -1,0 +1,12 @@
+{
+  "taskId": "T2-1",
+  "method": "no-mgmt",
+  "startTime": "2026-05-01T11:31:00.000Z",
+  "changeInjected": false,
+  "status": "Done",
+  "events": [
+    {"type": "task_start", "description": "开始实现博客系统路由"},
+    {"type": "task_end", "description": "完成文章路由和标签路由实现"},
+    {"type": "test_run", "description": "18个测试全部通过"}
+  ]
+}

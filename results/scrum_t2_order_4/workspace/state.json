@@ -1,0 +1,194 @@
+{
+  "taskId": "scrum_t2_order_4",
+  "method": "scrum",
+  "startTime": "2026-05-01T00:00:00.000Z",
+  "changeInjected": false,
+  "sprintNumber": 2,
+  "sprintRound": 1,
+  "productBacklog": [],
+  "sprintBacklog": [
+    "ATU-003"
+  ],
+  "sprintGoal": "实现订单状态机、库存扣减和幂等付款，确保 TestStateMachine + TestInventory + TestIdempotency 全部 12 个测试通过",
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Implement Product CRUD Routes",
+      "description": "Implement routes_product.py with three endpoints: POST /products (create), GET /products (list all), GET /products/<id> (get detail). Uses product_bp Blueprint. Response format: {status: ok, data: ...} or {status: error, message: ...}. Tests: TestProductCRUD (3 tests).",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — 开始实现",
+          "status": "In Progress"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Developer 完成，3/3 测试通过",
+          "status": "In Review"
+        },
+        {
+          "event": "Sprint 1 Round 1 — 审查通过",
+          "status": "Done"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Implement Order CRUD Routes",
+      "description": "Implement order creation, detail, and listing in routes_order.py. POST /orders validates stock, calculates total_amount, creates OrderItems, returns pending order. GET /orders/<id> returns order with items. GET /orders supports user_id and status query filters. Tests: TestOrderCRUD (4 tests).",
+      "status": "Done",
+      "dependencies": [
+        "ATU-001"
+      ],
+      "complexity": "M",
+      "priority": 2,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 1 Round 1 — 开始实现",
+          "status": "In Progress"
+        },
+        {
+          "event": "Sprint 1 Round 1 — Developer 完成，4/4 测试通过",
+          "status": "In Review"
+        },
+        {
+          "event": "Sprint 1 Round 1 — 审查通过",
+          "status": "Done"
+        }
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "Implement Order State Machine, Inventory & Idempotency",
+      "description": "Implement state transitions in routes_order.py: POST /orders/<id>/pay (pending→paid, requires Idempotency-Key header, deducts stock, idempotent via PaymentRequest), POST /orders/<id>/ship (paid→shipped), POST /orders/<id>/deliver (shipped→delivered), POST /orders/<id>/cancel (pending/paid→cancelled, restores stock if paid). Invalid transitions return 409. Tests: TestStateMachine (6), TestInventory (3), TestIdempotency (3).",
+      "status": "Done",
+      "dependencies": [
+        "ATU-002"
+      ],
+      "complexity": "L",
+      "priority": 3,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "event": "Sprint 2 Round 1 — 开始实现",
+          "status": "In Progress"
+        },
+        {
+          "event": "Sprint 2 Round 1 — Developer 完成，19/19 测试通过",
+          "status": "In Review"
+        },
+        {
+          "event": "Sprint 2 Round 1 — 审查通过",
+          "status": "Done"
+        }
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "Scrum 初始化完成 — Product Backlog 包含 3 个 ATU：ATU-001 (Product CRUD, S), ATU-002 (Order CRUD, M, 依赖 ATU-001), ATU-003 (State Machine + Inventory + Idempotency, L, 依赖 ATU-002)",
+      "timestamp": "2026-05-01T00:20:20.151Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Planning — 选取 ATU-001, ATU-002 进入 Sprint Backlog。Sprint Goal: 实现基础 CRUD 功能 — 商品路由 + 订单路由",
+      "timestamp": "2026-05-01T00:20:32.884Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Round 1 Standup — Developer: 两个路由文件均为空壳; Tester: 19 个测试用例待验证; Reviewer: 暂无代码可审查",
+      "timestamp": "2026-05-01T00:20:40.000Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "Sprint 1 Round 1 — 开始实现 Product CRUD Routes",
+      "timestamp": "2026-05-01T00:20:52.183Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 完成 — Product CRUD Routes 实现完毕，3/3 测试通过，审查通过",
+      "timestamp": "2026-05-01T00:22:20.445Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "Sprint 1 Round 1 — 开始实现 Order CRUD Routes",
+      "timestamp": "2026-05-01T00:22:37.141Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 完成 — Order CRUD Routes 实现完毕，4/4 测试通过，审查通过。Sprint Goal 7/7 测试全部通过",
+      "timestamp": "2026-05-01T00:24:34.842Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Review — 完成 ATU-001, ATU-002，Sprint Goal 达成。7/7 测试通过（TestProductCRUD 3/3 + TestOrderCRUD 4/4），0 退回，1 轮完成",
+      "timestamp": "2026-05-01T00:24:54.949Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 1 Retrospective — 做得好：ATU 拆分合理，Developer 一次通过；改进：ATU-003 复杂度较大(L)，需预留足够 buffer 轮次",
+      "timestamp": "2026-05-01T00:24:54.951Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Planning — 选取 ATU-003 进入 Sprint Backlog。Sprint Goal: 实现订单状态机、库存扣减和幂等付款，确保 12 个测试全部通过",
+      "timestamp": "2026-05-01T00:26:00.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Round 1 Standup — Developer: 需实现4个状态端点，复杂度高; Tester: 10个失败测试待修复; Reviewer: 重点关注状态机正确性和幂等性",
+      "timestamp": "2026-05-01T00:26:10.000Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "Sprint 2 Round 1 — 开始实现 Order State Machine, Inventory & Idempotency",
+      "timestamp": "2026-05-01T00:25:33.987Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 完成 — Order State Machine, Inventory & Idempotency 实现完毕，12/12 测试通过，审查通过。全部 19/19 测试通过",
+      "timestamp": "2026-05-01T00:27:02.266Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Review — 完成 ATU-003，Sprint Goal 达成。19/19 测试全部通过，0 退回，1 轮完成。所有 ATU 状态为 Done，项目完成",
+      "timestamp": "2026-05-01T00:28:00.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Retrospective — 做得好：ATU-003 复杂度高但一次通过，prompt 中继有效；改进：datetime.utcnow() 有 DeprecationWarning，可后续优化",
+      "timestamp": "2026-05-01T00:28:10.000Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Review — 完成 ATU-003，Sprint Goal 达成。19/19 测试全部通过，0 退回，1 轮完成。所有 ATU 状态为 Done，项目完成",
+      "timestamp": "2026-05-01T00:27:32.623Z"
+    },
+    {
+      "type": "note",
+      "description": "Sprint 2 Retrospective — 做得好：ATU-003 复杂度高但一次通过，prompt 中继有效；改进：datetime.utcnow() 有 DeprecationWarning，可后续优化",
+      "timestamp": "2026-05-01T00:27:32.625Z"
+    }
+  ],
+  "tokenLog": []
+}

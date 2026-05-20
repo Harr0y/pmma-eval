@@ -1,0 +1,236 @@
+{
+  "taskId": "evolutionary_t2_order_5",
+  "method": "evolutionary",
+  "startTime": "2026-05-01T07:45:00.000Z",
+  "changeInjected": false,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "使用 guard clauses（早期返回）进行错误处理，避免深层嵌套",
+      "使用 Serializer 类集中管理序列化逻辑（one/many 模式）",
+      "从 models.py 导入 db 而非 app.py，避免循环导入",
+      "验证逻辑抽取为独立函数，返回 (result, error) 元组",
+      "使用 STATE_TRANSITIONS 嵌套字典 + _transition_state() 统一函数处理状态机",
+      "使用 _fetch_products_by_ids() 批量查询产品，避免 N+1 查询",
+      "使用 filter_by(**filters) 动态构建查询条件",
+      "幂等性检查同时匹配 order_id 和 idempotency_key"
+    ],
+    "architecturalNotes": []
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Product CRUD routes",
+      "description": "Implement product routes: GET /products, POST /products, GET /products/<id>",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": ["starter/routes_product.py"],
+      "testClasses": ["TestProductCRUD"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "3/3", "strategy": "Functional style with json.dumps + make_response"},
+            {"name": "sample2", "score": "3/3", "strategy": "Serializer class + guard clauses + jsonify"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "使用 guard clauses（早期返回）进行错误处理避免深层嵌套",
+            "使用 Serializer 类集中管理序列化逻辑（one/many 模式）",
+            "从 models.py 导入 db 而非 app.py 避免循环导入",
+            "验证逻辑抽取为独立函数返回 (result, error) 元组"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "Order CRUD routes",
+      "description": "Implement order routes: POST /orders (create with stock validation), GET /orders/<id>, GET /orders (filter by user_id/status)",
+      "status": "Done",
+      "dependencies": ["ATU-001"],
+      "complexity": "M",
+      "files": ["starter/routes_order.py"],
+      "testClasses": ["TestOrderCRUD"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "19/19", "strategy": "Functional style, VALID_TRANSITIONS set, per-item product lookup"},
+            {"name": "sample2", "score": "19/19", "strategy": "Serializer classes, batch product lookup, STATE_TRANSITIONS dict, filter_by dynamic"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "使用 STATE_TRANSITIONS 嵌套字典 + _transition_state() 统一函数处理状态机",
+            "使用 _fetch_products_by_ids() 批量查询产品，避免 N+1 查询",
+            "使用 filter_by(**filters) 动态构建查询条件",
+            "幂等性检查同时匹配 order_id 和 idempotency_key"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "Order state machine",
+      "description": "Implement order state transitions: pay (pending→paid), ship (paid→shipped), deliver (shipped→delivered), cancel (pending/paid→cancelled). Invalid transitions return 409.",
+      "status": "Done",
+      "dependencies": ["ATU-002"],
+      "complexity": "M",
+      "files": ["starter/routes_order.py"],
+      "testClasses": ["TestStateMachine"],
+      "currentGeneration": 0,
+      "generations": [],
+      "history": [
+        "ATU-002 的最优样本（sample2）已包含完整状态机实现，通过全部 6 项 TestStateMachine 测试。无需单独进化。"
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-004",
+      "title": "Inventory + Idempotency",
+      "description": "Implement stock deduction on pay, stock restoration on cancel of paid orders, idempotency key handling for payments",
+      "status": "Done",
+      "dependencies": ["ATU-003"],
+      "complexity": "M",
+      "files": ["starter/routes_order.py"],
+      "testClasses": ["TestInventory", "TestIdempotency"],
+      "currentGeneration": 0,
+      "generations": [],
+      "history": [
+        "ATU-002 的最优样本（sample2）已包含完整库存扣减/回滚和幂等性实现，通过全部 6 项 TestInventory + TestIdempotency 测试。无需单独进化。"
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "TDD 测试先行 — 测试已存在于 tests/test_basic.py::TestProductCRUD (3 tests)，直接用作适应度函数",
+      "timestamp": "2026-04-30T23:44:28.319Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化开始（初始变异，无遗传材料）",
+      "timestamp": "2026-04-30T23:44:28.320Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-001",
+      "description": "委派 2 名 Developer 生成 sample1 和 sample2 变体",
+      "timestamp": "2026-04-30T23:44:28.321Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-001",
+      "description": "sample1: 3/3 通过, sample2: 3/3 通过。两者均完全通过",
+      "timestamp": "2026-04-30T23:46:05.941Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-001",
+      "description": "提取性状：guard clauses, Serializer类, models.py导入db, 验证函数(result,error)元组",
+      "timestamp": "2026-04-30T23:46:15.372Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-001",
+      "description": "第 1 代进化成功，ATU-001 完成",
+      "timestamp": "2026-04-30T23:46:15.374Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "ATU-001 通过第 1 代进化完成",
+      "timestamp": "2026-04-30T23:46:15.375Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "TDD 测试先行 — 测试已存在于 tests/test_basic.py::TestOrderCRUD (4 tests)，直接用作适应度函数",
+      "timestamp": "2026-04-30T23:46:35.946Z"
+    },
+    {
+      "type": "gen_start",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化开始（含 ATU-001 交叉遗传）",
+      "timestamp": "2026-04-30T23:46:35.947Z"
+    },
+    {
+      "type": "gen_variation",
+      "atu_id": "ATU-002",
+      "description": "委派 2 名 Developer 生成 sample1 和 sample2 变体（含 ATU-001 遗传材料）",
+      "timestamp": "2026-04-30T23:46:35.948Z"
+    },
+    {
+      "type": "gen_selection",
+      "atu_id": "ATU-002",
+      "description": "sample1: 19/19 通过, sample2: 19/19 通过。两者均通过全部测试（含 ATU-003/004 范围）",
+      "timestamp": "2026-04-30T23:48:20.123Z"
+    },
+    {
+      "type": "gen_retention",
+      "atu_id": "ATU-002",
+      "description": "提取性状：STATE_TRANSITIONS状态机, 批量产品查询, filter_by动态过滤, 幂等性双字段检查",
+      "timestamp": "2026-04-30T23:48:30.000Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-002",
+      "description": "第 1 代进化成功，ATU-002 完成（同时覆盖 ATU-003/004）",
+      "timestamp": "2026-04-30T23:48:30.001Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "ATU-002 通过第 1 代进化完成",
+      "timestamp": "2026-04-30T23:48:30.002Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 已被 ATU-002 最优样本覆盖，直接进入验收",
+      "timestamp": "2026-04-30T23:48:30.003Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 由 ATU-002 最优样本附带完成，6/6 TestStateMachine 测试通过",
+      "timestamp": "2026-04-30T23:48:30.004Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "ATU-003 无需单独进化，由 ATU-002 覆盖完成",
+      "timestamp": "2026-04-30T23:48:30.005Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 已被 ATU-002 最优样本覆盖，直接进入验收",
+      "timestamp": "2026-04-30T23:48:30.006Z"
+    },
+    {
+      "type": "evolution_complete",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 由 ATU-002 最优样本附带完成，6/6 TestInventory + TestIdempotency 测试通过",
+      "timestamp": "2026-04-30T23:48:30.007Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-004",
+      "description": "ATU-004 无需单独进化，由 ATU-002 覆盖完成",
+      "timestamp": "2026-04-30T23:48:30.008Z"
+    }
+  ],
+  "tokenLog": []
+}

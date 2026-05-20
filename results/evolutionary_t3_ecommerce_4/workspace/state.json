@@ -1,0 +1,125 @@
+{
+  "taskId": "T3-evolutionary-ecommerce",
+  "method": "evolutionary",
+  "startTime": "2026-05-01T08:00:00Z",
+  "changeInjected": true,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "装饰器授权模式：使用 functools.wraps 实现可复用的 admin_required 装饰器，分离鉴权与业务逻辑",
+      "统一错误响应助手 error_response(status_code, message)",
+      "独立序列化器函数：将 ORM 对象转为 dict 的专用函数",
+      "输入验证助手模式：集中式验证函数返回 (fields, error_response_or_None) 元组",
+      "原子库存扣减：update(Product.__table__).where(..., Product.stock >= quantity).values(stock=Product.stock - quantity)",
+      "嵌套事务 savepoint：db.session.begin_nested() 自动回滚",
+      "自定义领域异常：InsufficientStockError",
+      "自愈式限流器：内存缓存 + DB 交叉验证，自动修复测试 fixture DB 重置后的过期缓存",
+      "@rate_limit 装饰器：选择性路由限流，仅在 2xx 响应时记录时间戳",
+      "装饰器注入模式：@rate_limit 通过 kwargs 注入 user 对象到被包装视图函数"
+    ],
+    "architecturalNotes": [
+      "routes_product.py 使用函数式+装饰器模式",
+      "routes_order.py 使用函数式路由（ATU-003 从 MethodView 回归函数式以支持选择性装饰器）",
+      "middleware.py 承担限流职责，使用自愈式缓存设计"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "产品管理路由 (routes_product.py)",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "files": ["routes_product.py"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "6/6", "strategy": "极简函数式"},
+            {"name": "sample2", "score": "6/6", "strategy": "装饰器+验证助手"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": ["装饰器授权", "统一错误响应", "序列化器", "验证助手"]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "订单系统路由 (routes_order.py)",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "files": ["routes_order.py"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "7/7", "strategy": "悲观锁"},
+            {"name": "sample2", "score": "7/7", "strategy": "MethodView+原子UPDATE"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": ["原子UPDATE", "savepoint", "领域异常", "MethodView"]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "需求变更：Origin 字段 + 限流 + 原子库存",
+      "status": "Done",
+      "dependencies": ["ATU-001", "ATU-002"],
+      "complexity": "L",
+      "files": ["models.py", "middleware.py", "routes_order.py"],
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [
+            {"name": "sample1", "score": "10/19", "strategy": "MethodView+纯内存限流（状态泄漏）"},
+            {"name": "sample2", "score": "19/19", "strategy": "函数式+自愈限流+@rate_limit装饰器"}
+          ],
+          "winner": "sample2",
+          "retainedTraits": [
+            "自愈式限流器（内存缓存+DB交叉验证）",
+            "@rate_limit 装饰器（选择性路由限流+user注入）",
+            "函数式路由回归（装饰器组合更灵活）",
+            "Origin 字段支持（默认'web'，序列化器包含）"
+          ]
+        }
+      ],
+      "history": [],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {"type": "note", "description": "项目初始化完成，拆分为 3 个 ATU"},
+    {"type": "atu_start", "atu_id": "ATU-001", "description": "TDD 测试先行"},
+    {"type": "gen_start", "atu_id": "ATU-001", "description": "第 1 代进化开始"},
+    {"type": "gen_variation", "atu_id": "ATU-001", "description": "委派 Developer 生成 sample1 和 sample2"},
+    {"type": "gen_selection", "atu_id": "ATU-001", "description": "sample1: 6/6, sample2: 6/6。选择 sample2"},
+    {"type": "gen_retention", "atu_id": "ATU-001", "description": "提取性状：装饰器、错误响应、序列化器、验证助手"},
+    {"type": "evolution_complete", "atu_id": "ATU-001", "description": "第 1 代进化成功"},
+    {"type": "atu_end", "atu_id": "ATU-001", "description": "ATU-001 完成"},
+    {"type": "atu_start", "atu_id": "ATU-002", "description": "TDD 测试先行"},
+    {"type": "gen_start", "atu_id": "ATU-002", "description": "第 1 代进化开始，注入交叉遗传"},
+    {"type": "gen_variation", "atu_id": "ATU-002", "description": "委派 Developer 生成 sample1 和 sample2"},
+    {"type": "gen_selection", "atu_id": "ATU-002", "description": "sample1: 7/7, sample2: 7/7。选择 sample2"},
+    {"type": "gen_retention", "atu_id": "ATU-002", "description": "提取性状：原子UPDATE、savepoint、领域异常、MethodView"},
+    {"type": "evolution_complete", "atu_id": "ATU-002", "description": "第 1 代进化成功"},
+    {"type": "atu_end", "atu_id": "ATU-002", "description": "ATU-002 完成"},
+    {"type": "atu_start", "atu_id": "ATU-003", "description": "TDD 测试先行"},
+    {"type": "gen_start", "atu_id": "ATU-003", "description": "第 1 代进化开始，注入遗传材料"},
+    {"type": "gen_variation", "atu_id": "ATU-003", "description": "委派 Developer 生成 sample1 和 sample2（3文件版本）"},
+    {"type": "gen_selection", "atu_id": "ATU-003", "description": "sample1: 10/19（限流泄漏）, sample2: 19/19（全通过）。选择 sample2"},
+    {"type": "gen_retention", "atu_id": "ATU-003", "description": "提取性状：自愈限流器、@rate_limit装饰器、函数式回归、Origin支持"},
+    {"type": "evolution_complete", "atu_id": "ATU-003", "description": "第 1 代进化成功，19/19 全部通过"},
+    {"type": "atu_end", "atu_id": "ATU-003", "description": "ATU-003 完成"}
+  ],
+  "tokenLog": []
+}

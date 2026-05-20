@@ -1,0 +1,177 @@
+{
+  "taskId": "kanban_t2_order_5",
+  "method": "kanban",
+  "startTime": "2026-05-01T00:00:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": [
+      "ATU-001",
+      "ATU-002",
+      "ATU-003"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Product CRUD Routes",
+      "description": "Implement product routes in routes_product.py: POST /products (create), GET /products (list all), GET /products/<id> (get single). Return format: {status: ok, data: ...}. Error: 400 missing fields, 404 not found.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/routes_product.py"
+      ],
+      "history": [
+        {
+          "action": "To Do → In Progress",
+          "note": "拉入开发"
+        },
+        {
+          "action": "In Progress → In Review",
+          "note": "Developer 完成，提交测试"
+        },
+        {
+          "action": "In Review → Done",
+          "note": "测试通过(3/3)，审查通过"
+        }
+      ],
+      "retryCount": 0,
+      "attachments": {
+        "developer_output": "修改文件: starter/routes_product.py。添加了从 models 导入 Product，从 app 导入 db。实现了 _serialize_product() 辅助函数。实现 GET /products (200), POST /products (201, 验证 name/price/stock), GET /products/<id> (200, 404)。price 显式转 float，stock 显式转 int。",
+        "tester_report": "ATU-001 相关测试全部通过 (3/3): test_create_product PASSED, test_list_products PASSED, test_get_product PASSED。",
+        "reviewer_feedback": "审查通过。功能正确性、安全性、代码质量均通过。记录但不阻塞：Product.query.get() 建议后续改为 db.session.get()。"
+      }
+    },
+    {
+      "id": "ATU-002",
+      "title": "Order CRUD Routes",
+      "description": "Implement order CRUD in routes_order.py: POST /orders (create with stock validation, total_amount calc), GET /orders/<id> (detail with items), GET /orders (filter by user_id/status). Return format: {status: ok, data: ...}. Error: 400 invalid data/insufficient stock, 404 not found.",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "action": "To Do → In Progress",
+          "note": "拉入开发"
+        },
+        {
+          "action": "In Progress → In Review",
+          "note": "Developer 完成，提交测试"
+        },
+        {
+          "action": "In Review → Done",
+          "note": "测试通过(4/4)，审查通过"
+        }
+      ],
+      "retryCount": 0,
+      "attachments": {
+        "developer_output": "修改文件: starter/routes_order.py。添加了从 models 导入 Product, Order, OrderItem, PaymentRequest, db。实现 _order_to_dict() 辅助函数。POST /orders (201): 验证 user_id/items, 校验商品存在和库存, 计算 total_amount, 创建 Order+OrderItem。GET /orders/<id> (200/404): 返回订单含 items 列表。GET /orders (200): 支持 user_id/status 筛选。使用 db.session.flush() 获取自增 ID。PaymentRequest 已导入供 ATU-003 使用。",
+        "tester_report": "ATU-002 相关测试全部通过 (4/4): test_create_order PASSED, test_create_order_insufficient_stock PASSED, test_create_order_total_calculation PASSED, test_filter_orders PASSED。",
+        "reviewer_feedback": "审查通过。功能正确性、安全性、代码质量均通过。输入验证覆盖全面，db.session.flush() 策略正确。"
+      }
+    },
+    {
+      "id": "ATU-003",
+      "title": "Order Payment & State Machine",
+      "description": "Implement payment and state machine in routes_order.py: POST /orders/<id>/pay (pending→paid, Idempotency-Key header, stock deduction, idempotent), POST /orders/<id>/ship (paid→shipped), POST /orders/<id>/deliver (shipped→delivered), POST /orders/<id>/cancel (pending/paid→cancelled, restore stock if paid). Invalid transitions return 409.",
+      "status": "Done",
+      "dependencies": [
+        "ATU-002"
+      ],
+      "complexity": "L",
+      "priority": 3,
+      "files": [
+        "starter/routes_order.py"
+      ],
+      "history": [
+        {
+          "action": "To Do → In Progress",
+          "note": "ATU-002 已 Done，拉入开发"
+        },
+        {
+          "action": "In Progress → In Review",
+          "note": "Developer 完成，提交测试"
+        },
+        {
+          "action": "In Review → Done",
+          "note": "测试通过(12/12)，审查通过"
+        }
+      ],
+      "retryCount": 0,
+      "attachments": {
+        "developer_output": "修改文件: starter/routes_order.py (追加 lines 160-250)。POST /orders/<id>/pay: 验证 Idempotency-Key header (400), 幂等检查通过 PaymentRequest.idempotency_key (重复key返回已有结果), 状态检查 pending (409), 扣减库存, 设置 paid_at, 创建 PaymentRequest(status=completed), 200。POST /orders/<id>/ship: paid→shipped, shipped_at, 409。POST /orders/<id>/deliver: shipped→delivered, delivered_at, 409。POST /orders/<id>/cancel: pending/paid→cancelled, paid时回滚库存(product.stock += item.quantity), cancelled_at, 409。复用 _order_to_dict()。幂等检查在状态检查之前。",
+        "tester_report": "ATU-003 相关测试全部通过 (12/12)。TestStateMachine (6/6), TestInventory (3/3), TestIdempotency (3/3)。全部测试总体结果：19 passed, 0 failed。",
+        "reviewer_feedback": "审查通过。状态机转换逻辑正确，幂等性实现正确，库存扣减与回滚正确，ATU-002 CRUD 功能未被破坏。"
+      }
+    }
+  ],
+  "events": [
+    {
+      "type": "note",
+      "description": "Kanban 初始化完成：3个ATU，WIP限制=2",
+      "timestamp": "2026-05-01T03:13:46.711Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:14:05.437Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:14:05.438Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：ATU-001 (3/3 通过) + ATU-002 (4/4 通过)，有条件通过。10 个失败均属于 ATU-003 范围",
+      "timestamp": "2026-05-01T03:15:40.382Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:16:45.456Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:16:45.457Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:16:45.457Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：ATU-003 (12/12 通过)，全部 19/19 测试通过",
+      "timestamp": "2026-05-01T03:18:02.215Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试和审查，移至 Done"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试和审查，移至 Done。全部 19/19 测试通过",
+      "timestamp": "2026-05-01T03:18:56.611Z"
+    }
+  ],
+  "tokenLog": []
+}

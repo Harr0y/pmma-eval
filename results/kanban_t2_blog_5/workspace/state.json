@@ -1,0 +1,114 @@
+{
+  "taskId": "kanban_t2_blog_5",
+  "method": "kanban",
+  "startTime": "2026-05-01T00:00:00.000Z",
+  "endTime": "2026-05-01T03:12:26.887Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "标签 CRUD 路由 (routes_tag.py)",
+      "description": "实现 routes_tag.py 中的 4 个标签 CRUD 接口：POST /tags（创建标签，name 必填不可重复，返回 201/400/409）、GET /tags（获取所有标签列表）、PUT /tags/<id>（编辑标签名称，返回 200/404/400/409）、DELETE /tags/<id>（删除标签同时解除与文章的关联，返回 200/404）。所有接口返回格式为 {status, data} 或 {status, message}。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 1,
+      "files": ["starter/routes_tag.py"],
+      "history": [
+        {"action": "To Do → In Progress", "note": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成开发，委派 Tester"},
+        {"action": "In Review → Done", "note": "测试 6/6 通过，审查通过"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-002",
+      "title": "文章 CRUD 路由 (routes_article.py)",
+      "description": "实现 routes_article.py 中的 3 个基础文章 CRUD 接口：POST /articles（创建文章，title/body 必填，返回 201/400）、GET /articles（列出所有文章，可选 ?tag= 或 ?tag_id= 筛选）、GET /articles/<id>（获取单篇文章，返回 200/404）。所有接口返回格式为 {status, data} 或 {status, message}。注意 GET /articles 的筛选功能需要查询 article_tags 关联表。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "To Do → In Progress", "note": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成开发，委派 Tester"},
+        {"action": "In Review → Done", "note": "测试 4/4 通过，审查通过"}
+      ],
+      "retryCount": 0
+    },
+    {
+      "id": "ATU-003",
+      "title": "文章-标签绑定 + 筛选路由 (routes_article.py)",
+      "description": "实现 routes_article.py 中的文章-标签绑定接口：POST /articles/<id>/tags（绑定标签 {tag_ids: [1,2]}，返回 200/404/400）、GET /articles/<id>/tags（获取文章所有标签，返回 200/404）、DELETE /articles/<id>/tags/<tag_id>（解除绑定，返回 200/404）。同时确保 GET /articles 的 ?tag= 和 ?tag_id= 筛选功能正常工作。",
+      "status": "Done",
+      "dependencies": ["ATU-001", "ATU-002"],
+      "complexity": "M",
+      "priority": 3,
+      "files": ["starter/routes_article.py"],
+      "history": [
+        {"action": "To Do → In Progress", "note": "依赖 ATU-001、ATU-002 均已 Done，拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "note": "Developer 完成开发，委派 Tester"},
+        {"action": "In Review → Done", "note": "测试 18/18 全部通过，审查通过"}
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:07:46.529Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:07:46.530Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：ATU-001 全部通过(6/6)，ATU-002 全部通过(4/4)，ATU-003 未实现失败(6/6)，建议有条件通过",
+      "timestamp": "2026-05-01T03:09:44.605Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:10:13.033Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:10:13.034Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "依赖 ATU-001、ATU-002 均已 Done，从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:10:49.511Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：ATU-003 全部通过(8/8)，回归测试通过(10/10)，总计 18/18 全部通过",
+      "timestamp": "2026-05-01T03:12:02.643Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试(18/18)和审查，移至 Done。全部 ATU 完成！",
+      "timestamp": "2026-05-01T03:12:26.887Z"
+    }
+  ],
+  "tokenLog": []
+}

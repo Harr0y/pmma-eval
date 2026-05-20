@@ -1,0 +1,146 @@
+{
+  "taskId": "kanban_t2_order_4",
+  "method": "kanban",
+  "startTime": "2026-05-01T00:00:00Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": ["ATU-001", "ATU-002", "ATU-003"]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现商品路由 (routes_product.py)",
+      "description": "实现 routes_product.py 中的所有商品路由",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": ["starter/routes_product.py"],
+      "history": [
+        {"action": "To Do → In Progress", "description": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "description": "Developer 完成，移入 In Review"},
+        {"action": "In Review → Done", "description": "测试通过+审查通过，移至 Done"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改文件: starter/routes_product.py。实现 GET /products、POST /products（返回201）、GET /products/<id>（404 if not found）。",
+      "testerReport": "TestProductCRUD 3/3 通过。",
+      "reviewerResult": "审查通过：功能正确，返回格式规范，HTTP 状态码正确。"
+    },
+    {
+      "id": "ATU-002",
+      "title": "实现订单 CRUD 路由 (routes_order.py)",
+      "description": "实现 routes_order.py 中的订单 CRUD 路由",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "M",
+      "priority": 2,
+      "files": ["starter/routes_order.py"],
+      "history": [
+        {"action": "To Do → In Progress", "description": "从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "description": "Developer 完成，移入 In Review"},
+        {"action": "In Review → Done", "description": "测试通过+审查通过，移至 Done"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改文件: starter/routes_order.py。实现 POST /orders、GET /orders/<id>、GET /orders 筛选。提供了辅助函数。",
+      "testerReport": "TestOrderCRUD 4/4 通过。",
+      "reviewerResult": "审查通过：功能正确，库存校验逻辑正确，筛选参数处理合理。"
+    },
+    {
+      "id": "ATU-003",
+      "title": "实现订单状态机 + 支付幂等 + 库存扣减",
+      "description": "实现 routes_order.py 中的状态机路由和支付逻辑",
+      "status": "Done",
+      "dependencies": ["ATU-002"],
+      "complexity": "L",
+      "priority": 3,
+      "files": ["starter/routes_order.py"],
+      "history": [
+        {"action": "To Do → In Progress", "description": "依赖 ATU-002 已 Done，从 To Do 拉入 In Progress，委派 Developer"},
+        {"action": "In Progress → In Review", "description": "Developer 完成，移入 In Review"},
+        {"action": "In Review → Done", "description": "测试通过+审查通过，移至 Done"}
+      ],
+      "retryCount": 0,
+      "developerOutput": "修改文件: starter/routes_order.py。新增 4 个状态机路由（pay/ship/deliver/cancel）+ 幂等支付（Idempotency-Key）+ 库存扣减与回滚。新增 import datetime 和 PaymentRequest。",
+      "testerReport": "ATU-003 相关 12/12 通过，回归测试 7/7 通过，总计 19/19 全部通过。",
+      "reviewerResult": "审查通过：状态机转换正确，幂等逻辑完整（先查key→再检查状态→扣库存→创建记录→更新状态），库存扣减与回滚正确，回归安全。"
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:10:07.960Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-002",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:10:07.961Z"
+    },
+    {
+      "type": "note",
+      "atu_id": "ATU-001",
+      "description": "Developer 完成：实现 GET/POST /products 和 GET /products/<id>，3个商品测试通过",
+      "timestamp": "2026-05-01T03:11:21.464Z"
+    },
+    {
+      "type": "note",
+      "atu_id": "ATU-002",
+      "description": "Developer 完成：实现 POST/GET /orders 和订单筛选，4个订单CRUD测试通过",
+      "timestamp": "2026-05-01T03:11:21.466Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：ATU-001（3/3通过）、ATU-002（4/4通过），其他10个失败均属ATU-003范围，不阻塞流转",
+      "timestamp": "2026-05-01T03:12:04.315Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:12:33.649Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-002",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:12:33.652Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "依赖 ATU-002 已 Done，从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:12:40.000Z"
+    },
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-003",
+      "description": "依赖 ATU-002 已 Done，从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:13:00.125Z"
+    },
+    {
+      "type": "note",
+      "atu_id": "ATU-003",
+      "description": "Developer 完成：实现 pay/ship/deliver/cancel 4个状态机路由+幂等支付+库存扣减回滚，19/19测试通过",
+      "timestamp": "2026-05-01T03:13:31.010Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试：ATU-003 相关 12/12 通过，回归测试 7/7 通过，总计 19/19 全部通过",
+      "timestamp": "2026-05-01T03:14:03.211Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-003",
+      "description": "通过测试（19/19）和审查，移至 Done。所有 ATU 完成！",
+      "timestamp": "2026-05-01T03:14:33.726Z"
+    }
+  ],
+  "tokenLog": []
+}

@@ -1,0 +1,56 @@
+{
+  "taskId": "kanban_t1_todo_cli_4",
+  "method": "kanban",
+  "startTime": "2026-05-01T00:00:00.000Z",
+  "changeInjected": false,
+  "wipLimit": 2,
+  "board": {
+    "todo": [],
+    "inProgress": [],
+    "inReview": [],
+    "blocked": [],
+    "done": [
+      "ATU-001"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "实现 add/list/remove 命令",
+      "description": "在 starter/todo.py 的 main() 函数中实现三个命令：add（追加任务到文件）、list（显示 ID: 内容，1-based 行号，空列表无输出）、remove（按行号删除，ID 不存在时静默忽略）。已有 load_todos() 和 save_todos() 辅助函数。",
+      "status": "Done",
+      "dependencies": [],
+      "complexity": "S",
+      "priority": 1,
+      "files": [
+        "starter/todo.py"
+      ],
+      "history": [
+        "To Do → In Progress: 委派 Developer 实现",
+        "In Progress → In Review: Developer 完成，委派 Tester",
+        "In Review → Done: Tester 4/4 通过, Reviewer 审查通过"
+      ],
+      "retryCount": 0
+    }
+  ],
+  "events": [
+    {
+      "type": "atu_start",
+      "atu_id": "ATU-001",
+      "description": "从 To Do 拉入 In Progress，委派 Developer",
+      "timestamp": "2026-05-01T03:02:55.442Z"
+    },
+    {
+      "type": "test_run",
+      "description": "Tester 运行测试，结果：全部通过 (4/4)",
+      "timestamp": "2026-05-01T03:03:43.802Z"
+    },
+    {
+      "type": "atu_end",
+      "atu_id": "ATU-001",
+      "description": "通过测试和审查，移至 Done",
+      "timestamp": "2026-05-01T03:03:58.866Z"
+    }
+  ],
+  "tokenLog": []
+}

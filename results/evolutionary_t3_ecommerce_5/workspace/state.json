@@ -1,0 +1,113 @@
+{
+  "taskId": "evolutionary_t3_ecommerce_5",
+  "method": "evolutionary",
+  "startTime": "2026-05-01T00:00:00Z",
+  "changeInjected": true,
+  "maxGenerations": 5,
+  "populationSize": 2,
+  "geneticMaterial": {
+    "patterns": [
+      "使用独立的序列化辅助函数（如 _to_dict()）保持路由处理器简洁，使序列化逻辑可复用",
+      "采用 guard clause / early-return 模式处理错误，认证检查优先于请求体解析（fail fast）",
+      "在路由函数内部导入 db（from app import db）以避免循环导入问题",
+      "成功创建资源返回 HTTP 201 状态码（语义化 REST）",
+      "SELECT ... FOR UPDATE 悲观锁 + 单事务包含锁获取、库存扣减、订单创建（原子性保证）",
+      "origin 字段使用 body.get('origin', 'web') 在 Python 层默认，Order 模型 db.Column(default='web')",
+      "显式 try/except/rollback 事务安全模式确保异常时回滚",
+      "不存在的 product_id 返回 404（语义化 REST）",
+      "RateLimiter 类封装 + current_app.extensions 存储实现每 app 实例独立状态",
+      "两阶段限流 API（check + record）确保失败请求不消耗限流窗口",
+      "time.monotonic() 单调时钟避免系统时间回拨影响",
+      "模块级状态会导致测试间污染，状态必须存储在 Flask app 实例上"
+    ],
+    "architecturalNotes": [
+      "Flask Blueprint 注册模式：product_bp, order_bp",
+      "序列化模式：独立辅助函数 + list comprehension",
+      "错误处理模式：early-return guard clauses",
+      "原子库存扣减：SELECT ... FOR UPDATE 悲观锁",
+      "限流模式：RateLimiter 类 + app.extensions 存储 + 两阶段 API",
+      "ATU 间依赖：限流逻辑必须在订单路由完成后单独添加（ATU-003 依赖 ATU-002）",
+      "关键教训：模块级状态在 pytest fixture 间持久化，必须使用 app 实例级存储"
+    ]
+  },
+  "atus": [
+    {
+      "id": "ATU-001",
+      "title": "Product Routes Implementation",
+      "status": "done",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [{"name": "sample1", "score": "6/6", "status": "passed"}, {"name": "sample2", "score": "6/6", "status": "passed"}],
+          "winner": "sample1",
+          "retainedTraits": ["独立序列化辅助函数", "guard clause early-return", "函数内导入 db", "HTTP 201"]
+        }
+      ]
+    },
+    {
+      "id": "ATU-002",
+      "title": "Order System with Origin Field & Atomic Stock",
+      "status": "done",
+      "currentGeneration": 2,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [{"name": "sample1", "score": "4/11", "status": "partial"}, {"name": "sample2", "score": "4/11", "status": "partial"}],
+          "winner": "tie",
+          "retainedTraits": ["悲观锁原子扣减", "乐观条件UPDATE原子扣减", "服务层提取", "to_dict()实例方法"]
+        },
+        {
+          "gen": 2,
+          "samples": [{"name": "sample3", "score": "11/11", "status": "passed"}, {"name": "sample4", "score": "11/11", "status": "passed"}],
+          "winner": "sample3",
+          "retainedTraits": ["悲观锁单事务原子扣减", "origin字段Python层默认值", "显式事务回滚", "404语义化错误码"]
+        }
+      ]
+    },
+    {
+      "id": "ATU-003",
+      "title": "Rate Limiting Middleware",
+      "status": "done",
+      "currentGeneration": 1,
+      "generations": [
+        {
+          "gen": 1,
+          "samples": [{"name": "sample1", "score": "19/19", "status": "passed"}, {"name": "sample2", "score": "19/19", "status": "passed"}],
+          "winner": "sample1",
+          "retainedTraits": ["RateLimiter类+app.extensions存储", "两阶段限流API(check+record)", "time.monotonic()单调时钟", "失败不消耗限流窗口"]
+        }
+      ]
+    }
+  ],
+  "events": [
+    {"type":"note","description":"State initialized with 3 ATUs"},
+    {"type":"atu_start","atu_id":"ATU-001","description":"TDD red phase verified: 6 tests failing"},
+    {"type":"gen_start","atu_id":"ATU-001","description":"第 1 代进化开始"},
+    {"type":"gen_variation","atu_id":"ATU-001","description":"委派 Developer 生成 sample1 和 sample2"},
+    {"type":"gen_selection","atu_id":"ATU-001","description":"sample1: 6/6, sample2: 6/6. 选择 sample1"},
+    {"type":"gen_retention","atu_id":"ATU-001","description":"提取性状：序列化辅助函数、guard clause、函数内导入db、HTTP 201"},
+    {"type":"evolution_complete","atu_id":"ATU-001","description":"第 1 代进化成功"},
+    {"type":"atu_end","atu_id":"ATU-001","description":"ATU-001 完成"},
+    {"type":"atu_start","atu_id":"ATU-002","description":"TDD red phase verified. 交叉遗传注入"},
+    {"type":"gen_start","atu_id":"ATU-002","description":"第 1 代进化开始"},
+    {"type":"gen_variation","atu_id":"ATU-002","description":"委派 Developer 生成 sample1 和 sample2"},
+    {"type":"gen_selection","atu_id":"ATU-002","description":"sample1: 4/11, sample2: 4/11. 限流逻辑干扰"},
+    {"type":"gen_retention","atu_id":"ATU-002","description":"提取性状：悲观锁/乐观锁、服务层、序列化模式"},
+    {"type":"gen_end","atu_id":"ATU-002","description":"第 1 代结束 4/11，进入第 2 代"},
+    {"type":"gen_start","atu_id":"ATU-002","description":"第 2 代进化开始，注入适应度反馈"},
+    {"type":"gen_variation","atu_id":"ATU-002","description":"委派 Developer 生成 sample3 和 sample4（移除限流）"},
+    {"type":"gen_selection","atu_id":"ATU-002","description":"sample3: 11/11, sample4: 11/11. 选择 sample3"},
+    {"type":"gen_retention","atu_id":"ATU-002","description":"提取性状：悲观锁、origin默认值、事务回滚、404"},
+    {"type":"evolution_complete","atu_id":"ATU-002","description":"第 2 代进化成功"},
+    {"type":"atu_end","atu_id":"ATU-002","description":"ATU-002 完成"},
+    {"type":"atu_start","atu_id":"ATU-003","description":"交叉遗传注入"},
+    {"type":"gen_start","atu_id":"ATU-003","description":"第 1 代进化开始"},
+    {"type":"gen_variation","atu_id":"ATU-003","description":"委派 Developer 生成 sample1 和 sample2（限流中间件）"},
+    {"type":"gen_selection","atu_id":"ATU-003","description":"sample1: 19/19, sample2: 19/19. 选择 sample1"},
+    {"type":"gen_retention","atu_id":"ATU-003","description":"提取性状：RateLimiter类、两阶段API、monotonic时钟、失败不消耗窗口"},
+    {"type":"evolution_complete","atu_id":"ATU-003","description":"第 1 代进化成功"},
+    {"type":"atu_end","atu_id":"ATU-003","description":"ATU-003 完成"}
+  ],
+  "tokenLog": []
+}

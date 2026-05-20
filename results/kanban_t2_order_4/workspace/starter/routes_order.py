@@ -1,0 +1,257 @@
+"""
+T2 Order System — Order Routes
+
+Implement order CRUD, state machine, and payment with idempotency.
+Register as a Flask Blueprint named 'order_bp'.
+
+Order state machine:
+  pending → paid → shipped → delivered
+  pending/paid → cancelled
+
+Requirements:
+- POST /orders -> Create order
+  Request: {"user_id": str, "items": [{"product_id": int, "quantity": int}, ...]}
+  Response: {"status": "ok", "data": {"id": int, "user_id": str, "status": "pending",
+            "total_amount": float, "created_at": str}}
+  - Validates all products exist and stock is available
+  - Creates OrderItem records for each product
+  - total_amount = sum of (product.price * quantity) for all items
+  Errors: 400 if invalid data, product not found, or insufficient stock
+
+- GET /orders/<id> -> Get order with items
+  Response: {"status": "ok", "data": {"id": int, "user_id": str, "status": str,
+            "total_amount": float, "created_at": str,
+            "items": [{"id": int, "product_id": int, "quantity": int, "unit_price": float}, ...]}}
+  Errors: 404 if not found
+
+- GET /orders -> List orders, filter by user_id and/or status
+  Query params: user_id, status
+  Response: {"status": "ok", "data": [...]}
+
+- POST /orders/<id>/pay -> Pay for order (pending → paid)
+  Header: Idempotency-Key (required)
+  - Deducts stock from products
+  - Records PaymentRequest for idempotency
+  - Duplicate Idempotency-Key returns same result without re-processing
+  Errors: 404 if order not found, 400 if no key, 409 if invalid state transition
+
+- POST /orders/<id>/ship -> Ship order (paid → shipped)
+  Errors: 404 if not found, 409 if invalid state
+
+- POST /orders/<id>/deliver -> Deliver order (shipped → delivered)
+  Errors: 404 if not found, 409 if invalid state
+
+- POST /orders/<id>/cancel -> Cancel order (pending/paid → cancelled)
+  - Restores product stock if order was paid
+  Errors: 404 if not found, 409 if invalid state
+
+IMPORTANT: This module works with models.py (Order, OrderItem, PaymentRequest, Product)
+and routes_product.py. Stock deduction happens at payment time, not order creation.
+"""
+
+from datetime import datetime
+
+from flask import Blueprint, request, jsonify
+from app import db
+from models import Order, OrderItem, Product, PaymentRequest
+
+order_bp = Blueprint('order_bp', __name__)
+
+
+def _order_to_dict(order):
+    """Serialize an Order to a dict (without items)."""
+    return {
+        'id': order.id,
+        'user_id': order.user_id,
+        'status': order.status,
+        'total_amount': order.total_amount,
+        'created_at': order.created_at.isoformat() if order.created_at else None,
+    }
+
+
+def _order_item_to_dict(item):
+    """Serialize an OrderItem to a dict."""
+    return {
+        'id': item.id,
+        'product_id': item.product_id,
+        'quantity': item.quantity,
+        'unit_price': item.unit_price,
+    }
+
+
+@order_bp.route('/orders', methods=['POST'])
+def create_order():
+    """Create a new order with items. Validates products and stock."""
+    data = request.get_json()
+    if not data or 'user_id' not in data or 'items' not in data:
+        return jsonify({'status': 'error', 'message': 'user_id and items are required'}), 400
+
+    items = data['items']
+    if not isinstance(items, list) or len(items) == 0:
+        return jsonify({'status': 'error', 'message': 'items must be a non-empty list'}), 400
+
+    # Validate all products and compute total
+    product_cache = {}
+    total_amount = 0.0
+    for item in items:
+        pid = item.get('product_id')
+        quantity = item.get('quantity')
+        if pid is None or quantity is None:
+            return jsonify({'status': 'error', 'message': 'each item must have product_id and quantity'}), 400
+
+        if pid not in product_cache:
+            product = Product.query.get(pid)
+            if product is None:
+                return jsonify({'status': 'error', 'message': f'product {pid} not found'}), 400
+            product_cache[pid] = product
+
+        product = product_cache[pid]
+        if product.stock < quantity:
+            return jsonify({'status': 'error', 'message': f'insufficient stock for product {pid}'}), 400
+
+        total_amount += product.price * quantity
+
+    # Create order and items
+    order = Order(user_id=data['user_id'], status='pending', total_amount=total_amount)
+    db.session.add(order)
+    db.session.flush()  # get order.id before commit
+
+    for item in items:
+        pid = item['product_id']
+        quantity = item['quantity']
+        order_item = OrderItem(
+            order_id=order.id,
+            product_id=pid,
+            quantity=quantity,
+            unit_price=product_cache[pid].price,
+        )
+        db.session.add(order_item)
+
+    db.session.commit()
+
+    return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 201
+
+
+@order_bp.route('/orders/<int:order_id>', methods=['GET'])
+def get_order(order_id):
+    """Get a single order with its items."""
+    order = Order.query.get(order_id)
+    if order is None:
+        return jsonify({'status': 'error', 'message': 'order not found'}), 404
+
+    result = _order_to_dict(order)
+    result['items'] = [_order_item_to_dict(item) for item in order.items]
+    return jsonify({'status': 'ok', 'data': result})
+
+
+@order_bp.route('/orders', methods=['GET'])
+def list_orders():
+    """List orders, optionally filtered by user_id and/or status."""
+    query = Order.query
+    user_id = request.args.get('user_id')
+    status = request.args.get('status')
+    if user_id is not None:
+        query = query.filter_by(user_id=user_id)
+    if status is not None:
+        query = query.filter_by(status=status)
+    orders = query.all()
+    return jsonify({'status': 'ok', 'data': [_order_to_dict(o) for o in orders]})
+
+
+@order_bp.route('/orders/<int:order_id>/pay', methods=['POST'])
+def pay_order(order_id):
+    """Pay for an order (pending → paid). Requires Idempotency-Key header."""
+    order = Order.query.get(order_id)
+    if order is None:
+        return jsonify({'status': 'error', 'message': 'order not found'}), 404
+
+    idempotency_key = request.headers.get('Idempotency-Key')
+    if not idempotency_key:
+        return jsonify({'status': 'error', 'message': 'Idempotency-Key header is required'}), 400
+
+    # Check for existing idempotent request
+    existing = PaymentRequest.query.filter_by(idempotency_key=idempotency_key).first()
+    if existing:
+        # Idempotent: return the already-paid order without re-processing
+        return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 200
+
+    # Validate state transition
+    if order.status != 'pending':
+        return jsonify({'status': 'error', 'message': 'invalid state transition'}), 409
+
+    # Deduct stock
+    for item in order.items:
+        product = Product.query.get(item.product_id)
+        product.stock -= item.quantity
+
+    # Record payment request
+    payment = PaymentRequest(
+        order_id=order.id,
+        idempotency_key=idempotency_key,
+        status='completed',
+    )
+    db.session.add(payment)
+
+    # Update order state
+    order.paid_at = datetime.utcnow()
+    order.status = 'paid'
+    db.session.commit()
+
+    return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 200
+
+
+@order_bp.route('/orders/<int:order_id>/ship', methods=['POST'])
+def ship_order(order_id):
+    """Ship an order (paid → shipped)."""
+    order = Order.query.get(order_id)
+    if order is None:
+        return jsonify({'status': 'error', 'message': 'order not found'}), 404
+
+    if order.status != 'paid':
+        return jsonify({'status': 'error', 'message': 'invalid state transition'}), 409
+
+    order.shipped_at = datetime.utcnow()
+    order.status = 'shipped'
+    db.session.commit()
+
+    return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 200
+
+
+@order_bp.route('/orders/<int:order_id>/deliver', methods=['POST'])
+def deliver_order(order_id):
+    """Deliver an order (shipped → delivered)."""
+    order = Order.query.get(order_id)
+    if order is None:
+        return jsonify({'status': 'error', 'message': 'order not found'}), 404
+
+    if order.status != 'shipped':
+        return jsonify({'status': 'error', 'message': 'invalid state transition'}), 409
+
+    order.delivered_at = datetime.utcnow()
+    order.status = 'delivered'
+    db.session.commit()
+
+    return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 200
+
+
+@order_bp.route('/orders/<int:order_id>/cancel', methods=['POST'])
+def cancel_order(order_id):
+    """Cancel an order (pending/paid → cancelled). Restores stock if paid."""
+    order = Order.query.get(order_id)
+    if order is None:
+        return jsonify({'status': 'error', 'message': 'order not found'}), 404
+
+    if order.status not in ('pending', 'paid'):
+        return jsonify({'status': 'error', 'message': 'invalid state transition'}), 409
+
+    # If was paid, restore stock
+    if order.status == 'paid':
+        for item in order.items:
+            product = Product.query.get(item.product_id)
+            product.stock += item.quantity
+
+    order.cancelled_at = datetime.utcnow()
+    order.status = 'cancelled'
+    db.session.commit()
+
+    return jsonify({'status': 'ok', 'data': _order_to_dict(order)}), 200
