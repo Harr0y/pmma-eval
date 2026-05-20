@@ -80,11 +80,11 @@ def chart_bar_comparison():
 
     for bar, val in zip(bars, method_totals):
         ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.2,
-                f'{val}/15', ha='center', va='bottom', fontsize=13, fontweight='bold')
+                f'{val}/25', ha='center', va='bottom', fontsize=13, fontweight='bold')
 
-    ax.set_ylabel('通过次数 (满分15)', fontsize=12)
-    ax.set_title('PMMA-Eval: 各方法总通过数对比', fontsize=14, fontweight='bold')
-    ax.set_ylim(0, 17)
+    ax.set_ylabel('通过次数 (满分25)', fontsize=12)
+    ax.set_title('PMMA-Eval: 各方法总通过数对比 (5 runs)', fontsize=14, fontweight='bold')
+    ax.set_ylim(0, 28)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     plt.tight_layout()
@@ -132,8 +132,8 @@ def chart_cost_efficiency():
                    edgecolors='white', linewidth=2, zorder=5)
 
     ax.set_xlabel('平均 Token 消耗 (千)', fontsize=12)
-    ax.set_ylabel('总通过数 (满分15)', fontsize=12)
-    ax.set_title('PMMA-Eval: 成本效率分析', fontsize=14, fontweight='bold')
+    ax.set_ylabel('总通过数 (满分25)', fontsize=12)
+    ax.set_title('PMMA-Eval: 成本效率分析 (5 runs)', fontsize=14, fontweight='bold')
     ax.legend(fontsize=10)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
@@ -148,19 +148,22 @@ def chart_t3_detail():
     """图5: T3 电商+变更 各代详细结果（Evolutionary PM 亮点）"""
     # 读取 T3 evolutionary 的详细结果
     evo_t3_runs = []
-    for run in [1, 2, 3]:
+    for run in [1, 2, 3, 4, 5]:
         path = os.path.join(SCRIPT_DIR, f'evolutionary_t3_ecommerce_{run}', 'result.json')
         if os.path.exists(path):
             with open(path) as f:
                 data = json.load(f)
-                evo_t3_runs.append(data)
+                evo_t3_runs.append((data, run))
 
     if not evo_t3_runs:
         print('⚠ No T3 evolutionary data found, skipping T3 detail chart')
         return
 
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
-    for idx, (run_data, run_num) in enumerate(zip(evo_t3_runs, [1, 2, 3])):
+    n = len(evo_t3_runs)
+    fig, axes = plt.subplots(1, n, figsize=(4*n, 5), sharey=True)
+    if n == 1:
+        axes = [axes]
+    for idx, (run_data, run_num) in enumerate(evo_t3_runs):
         ax = axes[idx]
         results = run_data.get('results', [])
         # Extract ATU names and pass/fail
@@ -182,7 +185,7 @@ def chart_t3_detail():
             ax.text(0.5, j, '✓' if p else '✗', ha='center', va='center',
                     fontsize=14, fontweight='bold', color='white')
 
-    fig.suptitle('Evolutionary PM × T3 电商系统: 各运行详细结果', fontsize=13, fontweight='bold')
+    fig.suptitle('Evolutionary PM × T3 电商系统: 各运行详细结果 (5 runs)', fontsize=13, fontweight='bold')
     plt.tight_layout()
     plt.savefig(os.path.join(CHARTS_DIR, 't3_evolutionary_detail.png'), dpi=150, bbox_inches='tight')
     plt.close()
